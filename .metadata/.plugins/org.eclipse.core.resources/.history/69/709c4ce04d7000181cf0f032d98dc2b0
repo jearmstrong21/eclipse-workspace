@@ -1,8 +1,0 @@
-package co.megadodo.voronoidelaunay;
-
-public class Line {
-
-	public Vector2f a;
-	public Vector2f b;
-	
-}

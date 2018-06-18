@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename type &apos;co.megadodo.mathlib.Vec3f&apos; to &apos;Vec3&apos;&#x0A;- Original project: &apos;MathLib&apos;&#x0A;- Original element: &apos;co.megadodo.mathlib.Vec3f&apos;&#x0A;- Renamed element: &apos;co.megadodo.mathlib.Vec3&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Vec3f&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;co.megadodo.mathlib{Vec3f.java[Vec3f" matchStrategy="1" name="Vec3" qualified="false" references="true" similarDeclarations="false" stamp="1528934288543" textual="false" version="1.0"/>
-</session>

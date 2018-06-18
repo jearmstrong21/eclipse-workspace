@@ -1,9 +1,0 @@
-package co.megadodo.voronoidelaunay;
-
-public class VoronoiDelaunay {
-	
-	public static void main(String[] args) {
-		
-	}
-
-}

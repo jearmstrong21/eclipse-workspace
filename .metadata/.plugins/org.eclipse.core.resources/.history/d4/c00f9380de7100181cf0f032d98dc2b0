@@ -1,7 +1,0 @@
-package co.megadodo.hellojogamp;
-
-public class VAO {
-
-	public int vao;
-	
-}

@@ -1,9 +1,0 @@
-package co.megadodo.lwjglswingshaderfun;
-
-public class VertexBuffer {
-	
-	public int vbo;
-	public int vao;
-	public int ebo;
-
-}

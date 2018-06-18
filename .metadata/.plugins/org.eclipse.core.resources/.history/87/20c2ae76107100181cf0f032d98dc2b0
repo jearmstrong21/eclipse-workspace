@@ -1,9 +1,0 @@
-package co.megadodo.terraingen1.block;
-
-//A block is just a name to be referenced in code that can return blockstates
-public abstract class Block {
-
-	public abstract BlockState getState(String name);
-	public abstract BlockState getDefaultState();
-	
-}

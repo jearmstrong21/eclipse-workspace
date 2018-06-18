@@ -1,9 +1,0 @@
-package co.megadodo.mathy;
-
-public enum MOperator {
-	
-	COS,
-	SIN,
-	ADD
-
-}

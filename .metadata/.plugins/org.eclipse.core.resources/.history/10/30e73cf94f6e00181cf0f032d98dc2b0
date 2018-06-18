@@ -1,8 +1,0 @@
-package co.megadodo.shaderfun;
-
-public class ShaderFun {
-	
-	public static void main(String[]args) {
-	}
-
-}
