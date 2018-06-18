@@ -1,4 +1,4 @@
-package co.megadodo.hellojogamp;
+package co.megadodo.glframework;
 
 import java.io.File;
 import java.nio.ByteBuffer;

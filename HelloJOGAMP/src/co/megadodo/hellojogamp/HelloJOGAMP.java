@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -15,7 +16,14 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
-import co.megadodo.hellojogamp.VertexBuffer.PolygonMode;
+import co.megadodo.glframework.ArrayObject;
+import co.megadodo.glframework.BufferObjectFloat;
+import co.megadodo.glframework.BufferObjectInt;
+import co.megadodo.glframework.BufferTarget;
+import co.megadodo.glframework.BufferType;
+import co.megadodo.glframework.BufferUtils;
+import co.megadodo.glframework.PolygonMode;
+import co.megadodo.glframework.ShaderProgram;
 import glm.mat._4.Mat4;
 import glm.vec._3.Vec3;
 
@@ -57,24 +65,7 @@ public class HelloJOGAMP implements GLEventListener, KeyListener {
 	}
 	
 	ShaderProgram shader;
-	VertexBuffer vb;
-	float[]posData=new float[] {
-			0,0,0,
-			1,0,0,
-			0,1,0
-	};
-	float[]colData=new float[] {
-			1,0,0,
-			0,1,0,
-			0,0,1
-	};
-	int[]triData=new int[] {0,1,2,0,2,3,
-			4,5,6,4,6,7,
-			8,9,10,8,10,11,
-			12,13,14,12,14,15,
-			16,17,18,16,18,19,
-			20,21,22,20,22,23
-	};
+	ArrayObject vao;
 	
 	public void init(GLAutoDrawable drawable) {
 		GL4 gl = (GL4)drawable.getGL();
@@ -97,14 +88,66 @@ public class HelloJOGAMP implements GLEventListener, KeyListener {
 		System.out.println("Major version: "+major);
 		System.out.println("Minor version: "+minor);
 		
-		//maybe name gl framework GLEZ (gl ez, gl easy)
 		
 		shader=new ShaderProgram();
 		shader.genProgramFiles(gl, "Shaders/shader.vert", "Shaders/shader.frag");
 		
-		vb=new VertexBuffer();
-		vb.polygonMode=PolygonMode.Fill;
-		vb.genBuffers(gl,posData,colData,triData);
+		vao=new ArrayObject();
+		vao.polygonMode=PolygonMode.Fill;
+
+		int w=100;
+		int h=100;
+		
+		ArrayList<Vec3>posList=new ArrayList<Vec3>();
+		ArrayList<Vec3>colList=new ArrayList<Vec3>();
+		ArrayList<Integer>triList=new ArrayList<Integer>();
+		
+		float dx=1.0f/w;
+		float dy=1.0f/h;
+		OpenSimplexNoise osn=new OpenSimplexNoise((long)(Math.random()*Long.MAX_VALUE));
+		for(int ix=0;ix<w;ix++) {
+			for(int iy=0;iy<h;iy++) {
+				float x=ix*dx*2.0f-1.0f;
+				float y=iy*dy*2.0f-1.0f;
+				int i=posList.size();
+				float f00=((float)osn.eval(x,y));
+				float f10=((float)osn.eval(x+dx,y));
+				float f01=((float)osn.eval(x,y+dy));
+				float f11=((float)osn.eval(x+dy,y+dx));
+				Vec3 col00=new Vec3(f00,0,0);
+				Vec3 col10=new Vec3(f10,0,0);
+				Vec3 col01=new Vec3(f01,0,0);
+				Vec3 col11=new Vec3(f11,0,0);
+				posList.add(new Vec3(x,y,0));colList.add(col00);
+				posList.add(new Vec3(x+dx*2,y,0));colList.add(col10);
+				posList.add(new Vec3(x+dx*2,y+dy*2,0));colList.add(col11);
+				posList.add(new Vec3(x,y+dy*2,0));colList.add(col01);
+				triList.add(i+0);
+				triList.add(i+1);
+				triList.add(i+2);
+				triList.add(i+0);
+				triList.add(i+2);
+				triList.add(i+3);
+			}
+		}
+		
+		float[]posData=BufferUtils.v3ToFloatArr(BufferUtils.listToVec3Arr(posList));
+		float[]colData=BufferUtils.v3ToFloatArr(BufferUtils.listToVec3Arr(colList));
+		int[]triData=BufferUtils.listToIntArr(triList);
+		
+		BufferObjectFloat posbf=new BufferObjectFloat(BufferTarget.ArrayBuffer, BufferType.Static, 3, 0, posData);
+		posbf.genBuffers(gl);
+		
+		BufferObjectFloat colbf=new BufferObjectFloat(BufferTarget.ArrayBuffer, BufferType.Static, 3, 1, colData);
+		colbf.genBuffers(gl);
+		
+		BufferObjectInt trisbf=new BufferObjectInt(BufferTarget.ElementBuffer, BufferType.Static, triData);
+		trisbf.genBuffers(gl);
+		
+		vao.buffers.add(posbf);
+		vao.buffers.add(colbf);
+		vao.buffers.add(trisbf);
+		vao.genBuffers(gl);
 	}
 	
 	public void reshape(GLAutoDrawable drawable,int x,int y,int w,int h) {
@@ -114,52 +157,25 @@ public class HelloJOGAMP implements GLEventListener, KeyListener {
 	public void update() {
 		
 	}
-	float x=0,z=-2;
-	boolean isA=false,isD=false,isW=false,isS=false;
-	float time=0;
 	public void render(GLAutoDrawable drawable) {
-		time++;
 		GL4 gl = (GL4)drawable.getGL();
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		gl.glClear(GL4.GL_DEPTH_BUFFER_BIT|GL4.GL_COLOR_BUFFER_BIT);
 		shader.bindProgram(gl);
-//		Mat4 view=new Mat4();
-		Mat4 transform=new Mat4();
-		transform.perspective(80.0f, 1.0f, 0.01f, 10.0f);
-//		transform.rotate(time*0.01f, new Vec3(1, 0, 0));
-//		transform.rotate(time*0.02f, new Vec3(0, 1, 0));
-//		transform.rotate(time*0.03f, new Vec3(0, 0, 1));
-		transform.translate(new Vec3(x,0,z));
-		frame.requestFocus();
-		float speed=0.01f;
-		if(isA)x-=speed;
-		if(isD)x+=speed;
-		if(isW)z+=speed;
-		if(isS)z-=speed;
-		shader.uniformMat4(gl, "Matrix", transform);
-		vb.render(gl);
-		System.out.println(isA+" "+isD+" "+isW+" "+isD+" "+x+" "+z);
+		shader.uniformMat4(gl, "Matrix", new Mat4());
+		vao.render(gl);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode()==KeyEvent.VK_A)isA=true;
-		if(e.getKeyCode()==KeyEvent.VK_D)isD=true;
-		if(e.getKeyCode()==KeyEvent.VK_W)isW=true;
-		if(e.getKeyCode()==KeyEvent.VK_S)isS=true;
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode()==KeyEvent.VK_A)isA=false;
-		if(e.getKeyCode()==KeyEvent.VK_D)isD=false;
-		if(e.getKeyCode()==KeyEvent.VK_W)isW=false;
-		if(e.getKeyCode()==KeyEvent.VK_S)isS=false;
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
