@@ -1,0 +1,27 @@
+package co.megadodo.terraingen1.gen.mine1;
+
+import co.megadodo.terraingen1.Utils;
+import co.megadodo.terraingen1.block.BlockState;
+
+//A biome with a heightmap
+public class AbstractBiomeHeight extends AbstractBiome {
+	
+	public Expr<BlockState> top,mid,bot;
+	public Expr<Integer> height;
+
+	@Override
+	public BlockState[] paintColumn(int x, int z) {
+		BlockState[] c=Utils.emptyColumn();
+		int h=height.evaluate(x, -1, z);
+		for(int y=0;y<h-10;y++) {
+			c[y]=bot.evaluate(x, y, z);
+		}
+		for(int y=h-10;y<h;y++) {
+			c[y]=mid.evaluate(x, y, z);
+		}
+		c[h]=top.evaluate(x, h, z);
+//		if(x>=-20&&z>=-20&&x<=20&&z<=20)LightingManager.addLight(new Vector3f(x,h+3,z));
+		return c;
+	}
+
+}

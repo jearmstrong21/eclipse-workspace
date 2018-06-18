@@ -1,0 +1,11 @@
+{
+name: "Snow",
+mesh: "Block",
+mat: "Opaque",
+xmi: "Snow",
+xpl: "Snow",
+ymi: "Snow",
+ypl: "Snow",
+zmi: "Snow",
+zpl: "Snow"
+}

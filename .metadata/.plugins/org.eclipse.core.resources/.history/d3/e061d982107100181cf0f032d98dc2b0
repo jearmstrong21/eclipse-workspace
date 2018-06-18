@@ -1,0 +1,8 @@
+package co.megadodo.mcclone.gen.mine1;
+
+//Expression interface
+public interface Expr<T> {
+
+	public abstract T evaluate(int x, int y, int z);
+	
+}

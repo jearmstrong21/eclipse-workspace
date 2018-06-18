@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;jme3&apos; to &apos;JME3SwingShaderFun&apos;&#x0A;- Original project: &apos;JME3Boids&apos;&#x0A;- Destination element: &apos;JME3SwingShaderFun&apos;&#x0A;- Original element: &apos;jme3&apos;" description="Copy folder" destination="=JME3SwingShaderFun" element1="jme3" files="0" flags="589830" folders="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1528754173387" units="0" version="1.0"/>
+</session>

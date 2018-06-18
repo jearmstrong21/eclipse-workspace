@@ -1,0 +1,10 @@
+package co.megadodo.mathlib;
+
+public class Mat2 {
+	
+	public float _00;
+	public float _01;
+	public float _10;
+	public float _11;
+
+}

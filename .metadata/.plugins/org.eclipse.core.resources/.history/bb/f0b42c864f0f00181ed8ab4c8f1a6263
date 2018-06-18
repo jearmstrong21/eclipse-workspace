@@ -1,0 +1,28 @@
+package co.megadodo.terraingen1;
+
+import java.util.Map;
+
+import org.json.JSONObject;
+
+public class EvaluatorFloat extends Evaluator<Float> {
+	
+	public static float eval(JSONObject object, Map<String, Float> floatMap, Map<String, String> stringMap) {
+		return new EvaluatorFloat().evaluate(object, floatMap, stringMap);
+	}
+
+	@Override
+	public Float evaluate(JSONObject object, Map<String, Float> floatMap, Map<String, String> stringMap) {
+		String type = object.getString("type");
+		if(type.equals("literal"))return (float)object.getDouble("value");
+		if(type.equals("var"))return floatMap.get(object.getString("value"));
+		if(type.equals("+")) return eval(object.getJSONObject("a"),floatMap,stringMap)+eval(object.getJSONObject("b"),floatMap,stringMap);
+		if(type.equals("-")) return eval(object.getJSONObject("a"),floatMap,stringMap)-eval(object.getJSONObject("b"),floatMap,stringMap);
+		if(type.equals("*")) return eval(object.getJSONObject("a"),floatMap,stringMap)*eval(object.getJSONObject("b"),floatMap,stringMap);
+		if(type.equals("/")) return eval(object.getJSONObject("a"),floatMap,stringMap)/eval(object.getJSONObject("b"),floatMap,stringMap);
+		if(type.equals("if")) {
+			boolean result = EvaluatorBool.eval(object.getJSONObject("expr"), floatMap, stringMap);
+		}
+		return 0f;
+	}
+
+}

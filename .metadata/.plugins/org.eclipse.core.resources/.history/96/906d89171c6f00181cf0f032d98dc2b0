@@ -1,0 +1,45 @@
+package co.megadodo.shaderfun;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
+import javax.media.opengl.GL3;
+
+public class VertexBuffer {
+	
+	
+	public VertexBuffer() {
+		
+	}
+	
+	public int vao;
+	public int[] vbos;
+	
+	public void genBuffers(GL3 gl,FloatBuffer posData,FloatBuffer colData,IntBuffer triData) {
+		IntBuffer vaoBuffer=IntBuffer.wrap(new int[] {vao});
+		gl.glGenVertexArrays(1, vaoBuffer);
+		vao=vaoBuffer.get(0);
+		
+		vbos=new int[2];
+		IntBuffer vboBuffer=IntBuffer.wrap(vbos);
+		gl.glGenBuffers(2, vboBuffer);
+		vbos=vboBuffer.array();
+		
+		gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, vbos[0]);
+		gl.glBufferData(GL3.GL_ARRAY_BUFFER, 9, posData, GL3.GL_STATIC_DRAW);
+		
+		gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, vbos[1]);
+		gl.glBufferData(GL3.GL_ARRAY_BUFFER, 9, colData, GL3.GL_STATIC_DRAW);
+		
+		gl.glEnableVertexAttribArray(0);
+		gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, vbos[0]);
+		gl.glVertexAttribPointer(0,3,GL3.GL_FLOAT,false,0,null);
+	}
+	
+	public void bindBuffers(GL3 gl) {
+	}
+	
+	public void deleteBuffers(GL3 gl) {
+	}
+
+}

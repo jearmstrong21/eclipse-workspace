@@ -1,0 +1,13 @@
+package co.megadodo.mathy;
+
+//TODO: Bring justice to the demonic creators of this thing of layouts given the name "Java Swing"
+public class Mathy {
+
+	public static void main(String[]args) {
+		MTokenizer.main();
+	}
+
+	public Mathy() {
+	}
+
+}

@@ -1,0 +1,11 @@
+{
+name:"Grass",
+mesh:"Block",
+mat:"Opaque",
+xmi:"GrassSide",
+xpl:"GrassSide",
+ymi:"Dirt",
+ypl:"GrassTop",
+zmi:"GrassSide",
+zpl:"GrassSide"
+}

@@ -1,0 +1,8 @@
+package co.megadodo.lwjglswingshaderfun;
+
+public class Vertex {
+	
+	public Vector3f pos;
+	public Vector3f col;
+
+}

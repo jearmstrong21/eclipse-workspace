@@ -1,0 +1,11 @@
+package co.megadodo.shaderfun;
+
+import net.rabbit.rgl.core.context.Display;
+
+public class ShaderFun {
+	
+	public static void main(String[] args) {
+		Display display = new Display(1000, 1000, "Shader fun");
+	}
+
+}

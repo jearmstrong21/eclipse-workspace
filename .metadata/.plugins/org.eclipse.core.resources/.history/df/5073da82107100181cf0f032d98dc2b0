@@ -1,0 +1,17 @@
+package co.megadodo.mcclone.gen.mine1;
+
+//Literal expresion
+public class ExprLit<T> implements Expr<T> {
+
+	public T value;
+
+	public ExprLit(T v) {
+		value=v;
+	}
+	
+	@Override
+	public T evaluate(int x, int y, int z) {
+		return value;
+	}
+	
+}

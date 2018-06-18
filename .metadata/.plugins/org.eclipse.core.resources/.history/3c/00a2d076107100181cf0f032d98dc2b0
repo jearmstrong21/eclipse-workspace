@@ -1,0 +1,9 @@
+package co.megadodo.terraingen1.light;
+
+//NONE is no sunlight, MODERATE is normal
+public enum SunlightMethod {
+	
+	NONE,
+	MODERATE;
+
+}

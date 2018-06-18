@@ -1,0 +1,25 @@
+package co.megadodo.shaderfun;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
+import javax.media.opengl.GL3;
+
+public class VertexBuffer {
+	
+	
+	public VertexBuffer() {
+		
+	}
+	
+	public void genBuffers(GL3 gl,FloatBuffer fs,IntBuffer ts) {
+
+	}
+	
+	public void bindBuffers(GL3 gl) {
+	}
+	
+	public void deleteBuffers(GL3 gl) {
+	}
+
+}

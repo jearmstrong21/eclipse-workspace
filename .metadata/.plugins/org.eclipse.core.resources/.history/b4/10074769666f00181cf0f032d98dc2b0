@@ -1,0 +1,32 @@
+package co.megadodo.mathlib;
+
+import java.security.InvalidParameterException;
+
+public class Vec3 {
+
+	public float x;
+	public float y;
+	public float z;
+
+	public Vec3() {
+
+	}
+
+	public Vec3(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
+	public float get(int i) {
+		if(i==0)return x;
+		if(i==1)return y;
+		if(i==2)return z;
+		throw new InvalidParameterException("Vec3.get("+i+") is not 0,1 or 2.");
+	}
+	
+	public static Vec3 cross(Vec3 a, Vec3 b) {
+		
+	}
+
+}

@@ -1,0 +1,12 @@
+package co.megadodo.terraingen1.gen.mine1;
+
+import java.util.ArrayList;
+
+//This is not used
+@Deprecated
+public abstract class AbstractDecoration {
+	
+	@Deprecated
+	public abstract ArrayList<BlockPair> decorate(ChunkProviderMine1 cpm1);
+
+}

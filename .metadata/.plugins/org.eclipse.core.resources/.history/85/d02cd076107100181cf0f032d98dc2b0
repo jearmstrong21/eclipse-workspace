@@ -1,0 +1,10 @@
+package co.megadodo.terraingen1.light;
+
+//Method for ambient lighting - dark, moderate or bright
+public enum AmbientMethod {
+	
+	DARK,
+	MODERATE,
+	BRIGHT;
+
+}

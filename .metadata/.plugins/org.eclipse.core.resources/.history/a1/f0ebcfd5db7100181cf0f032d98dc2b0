@@ -1,0 +1,16 @@
+package co.megadodo.hellojogamp;
+
+import com.jogamp.opengl.GL4;
+
+public class ShaderProgram {
+	
+	public ShaderProgram() {
+		
+	}
+	
+	public static int compileShader(GL4 gl, int type, String typeStr, String source) {
+		int shaderID=gl.glCreateShader(type);
+		gl.glShaderSource(shaderID, 1, source, null);
+	}
+
+}

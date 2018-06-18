@@ -1,0 +1,3 @@
+INDEX VERSION 1.130+/Users/jackarmstrong/Documents/eclipse-workspace/.metadata/.plugins/org.eclipse.jdt.core
+664751981.index
+299596949.index

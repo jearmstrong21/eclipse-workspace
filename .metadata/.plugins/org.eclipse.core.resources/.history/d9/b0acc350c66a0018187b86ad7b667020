@@ -1,0 +1,19 @@
+package co.megadodo.lwjglswingshaderfun;
+
+import java.io.File;
+import java.util.Scanner;
+
+public class Shader {
+	
+	public long programID;
+	public static String loadFile(String fileName) {
+		String str="";
+		Scanner sc=new Scanner(new File(fileName));
+		while(sc.hasNextLine()) {
+			str+=sc.nextLine();
+		}
+		sc.close();
+		return str;
+	}
+	
+}

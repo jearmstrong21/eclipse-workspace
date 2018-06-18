@@ -1,0 +1,188 @@
+package co.megadodo.mcclone.main;
+
+import com.jme3.app.SimpleApplication;
+import com.jme3.asset.plugins.FileLocator;
+import com.jme3.bounding.BoundingSphere;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FogFilter;
+import com.jme3.renderer.RenderManager;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
+import com.jme3.system.AppSettings;
+import com.jme3.texture.Image;
+import com.jme3.texture.Image.Format;
+import com.jme3.texture.Texture;
+import com.jme3.texture.Texture2D;
+import com.jme3.texture.image.ColorSpace;
+import com.jme3.texture.image.ImageRaster;
+import com.jme3.util.BufferUtils;
+
+import co.megadodo.mcclone.appstate.AppStateGUI;
+import co.megadodo.mcclone.appstate.AppStateWorld;
+import co.megadodo.mcclone.block.Block;
+import co.megadodo.mcclone.block.MatType;
+import co.megadodo.mcclone.block.NormalBlock;
+import co.megadodo.mcclone.chunk.Chunk;
+import co.megadodo.mcclone.filter.FilterShader;
+import co.megadodo.mcclone.manager.chunk.ChunkManager;
+import co.megadodo.mcclone.mesh.AtlasPosition;
+import co.megadodo.mcclone.mesh.MeshData;
+import co.megadodo.mcclone.utils.Utils;
+
+public class MC extends SimpleApplication {
+
+	public static void main(String[] args) {
+		AppSettings as = new AppSettings(true);
+		as.setWidth(1440);
+		as.setHeight(900);
+		MC mc = new MC();
+		mc.setSettings(as);
+		mc.start();
+	}
+
+	public Texture atlasTex;
+	public Image image;
+	public ImageRaster raster;
+	public static int texWidth = 5;
+	public static int texHeight = 5;
+	public static int tileW = 32;
+	public static int tileH = 32;
+
+	public void placeTexture(String texName, int tx, int ty) {
+		Texture tex = assetManager.loadTexture("blocks/" + texName + ".png");
+		Image img = tex.getImage();
+		ImageRaster rast = ImageRaster.create(img);
+		for (int x = 0; x < tileW; x++) {
+			for (int y = 0; y < tileH; y++) {
+				raster.setPixel(x + tx * tileW, y + ty * tileH, rast.getPixel(tileW - 1 - x, y));
+			}
+		}
+	}
+
+	public static Block Grass,Dirt,Stone,SnowyDirt,Snow;
+	public static Block ErrorBlock;
+
+	@Override
+	public void simpleInitApp() {
+
+		assetManager.registerLocator("Assets/", FileLocator.class);
+		assetManager.registerLocator("Assets/textures/", FileLocator.class);
+
+		image = new Image(Format.BGR8, texWidth * tileW, texHeight * tileH,
+				BufferUtils.createByteBuffer(texWidth * tileW * texHeight * tileH * 3), null, ColorSpace.Linear);
+		raster = ImageRaster.create(image);
+		AtlasPosition grassTop = new AtlasPosition(0, 0);
+		AtlasPosition grassSide = new AtlasPosition(1, 0);
+		AtlasPosition dirt = new AtlasPosition(2, 0);
+		AtlasPosition stone=new AtlasPosition(1,1);
+		AtlasPosition snowTop=new AtlasPosition(3,0);
+		AtlasPosition snowSide=new AtlasPosition(4,0);
+		
+		placeTexture("grass_top", grassTop.x, grassTop.y);
+		placeTexture("grass_side", grassSide.x, grassSide.y);
+		placeTexture("grass_side_snowed", snowSide.x,snowSide.y);
+		placeTexture("snow", snowTop.x,snowTop.y);
+		placeTexture("dirt", dirt.x, dirt.y);
+		placeTexture("stone", stone.x,stone.y);
+
+		AtlasPosition errorAP=new AtlasPosition(0,0);
+		errorAP._00=new Vector2f(1,1);
+		errorAP._10=new Vector2f(0,1);
+		errorAP._01=new Vector2f(1,0);
+		errorAP._11=new Vector2f(0,0);
+
+		atlasTex = new Texture2D(image);
+
+		Utils.setTexFlags(atlasTex);
+
+		Grass = new NormalBlock(grassSide, grassTop, dirt, ColorRGBA.White, new ColorRGBA( 127,200,78,255).mult(1/255f));
+		Dirt=new NormalBlock(dirt,dirt,dirt,ColorRGBA.White,ColorRGBA.White);
+		Stone=new NormalBlock(stone,stone,stone,ColorRGBA.White,ColorRGBA.White);
+		SnowyDirt=new NormalBlock(snowSide,snowTop,dirt,ColorRGBA.White,ColorRGBA.White);
+		
+		ErrorBlock=new NormalBlock(errorAP,errorAP,errorAP,ColorRGBA.White,ColorRGBA.White);
+
+		Chunk chunk=new Chunk();
+		for(int x=0;x<16;x++) {
+			for(int z=0;z<16;z++) {
+//				int h=(int)(x*Math.exp(z/6f));
+//				int h=Math.abs(x+z-16);
+				int h=20;
+				chunk.data[x][h][z]=Grass.getDefaultState();
+				for(int y=0;y<h;y++) {
+					if(y<h-10)chunk.data[x][y][z]=Stone.getDefaultState();
+					else chunk.data[x][y][z]=Dirt.getDefaultState();
+				}
+			}
+		}
+		MeshData md=chunk.genMesh(MatType.Opaque,0,0,new Chunk(),new Chunk(),new Chunk(),new Chunk());
+//		md.addReverseTris();
+		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+		mat.setTexture("ColorMap", atlasTex);
+//		mat.getAdditionalRenderState().setWireframe(true);
+		mat.setBoolean("VertexColor", true);
+		Mesh mesh = md.jmeMesh();
+		Geometry geo = new Geometry("MyMesh", mesh);
+		geo.setMaterial(mat);
+		geo.setModelBound(new BoundingSphere(Float.MAX_VALUE, Vector3f.ZERO));
+//		ForceShieldControl fsc=new ForceShieldControl(mat);
+//		geo.addControl(fsc);
+		rootNode.attachChild(geo);
+		viewPort.setBackgroundColor(ColorRGBA.Blue.interpolateLocal(ColorRGBA.LightGray, 0.9f));
+		
+
+		AppStateGUI asg = new AppStateGUI();
+		asg.cam = cam;
+		asg.font = guiFont;
+		asg.width = settings.getWidth();
+		asg.height = settings.getHeight();
+		asg.guiNode = guiNode;
+		stateManager.attach(asg);
+		
+		AppStateWorld asw=new AppStateWorld();
+		stateManager.attach(asw);
+
+		flyCam.setMoveSpeed(10);
+
+//		GrayScaleFilter gsf=new GrayScaleFilter();
+		
+		
+//		MotionBlurFilter mbf = new MotionBlurFilter();
+		FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+//		FogFilter ff=new FogFilter(ColorRGBA.White, 0.75f, 2f);
+//		PixelationFilter pf=new PixelationFilter();
+//		pf.setPixelWidth(10);
+//		pf.setPixelHeight(10);
+//		fpp.addFilter(ff);
+//		fpp.addFilter(pf);
+//		fs=new FilterShader("Shader1");
+//		fpp.addFilter(fs);
+//		fpp.addFilter(gsf);
+//		fpp.addFilter(mbf);
+		viewPort.addProcessor(fpp);
+//		fs.setFloat("ResX", settings.getWidth()/2);
+//		fs.setFloat("ResY", settings.getHeight()/2);
+		setDisplayFps(false);
+		setDisplayStatView(false);
+		
+		ChunkManager.startThread();
+	}
+	FilterShader fs;
+	float time=0;
+	@Override
+	public void simpleUpdate(float tpf) {
+		time+=tpf;
+	}
+	@Override
+	public void simpleRender(RenderManager rm) {
+//		rm.addForcedMatParam(new MatParamOverride(VarType.Texture2D, "ColorMap", null));
+//		time+=tpf;
+//		fs.mat.setFloat("TexRot", time);
+//		fs.mat.setFloat("TexScale", 0.25f*(FastMath.cos(time)+0.5f));
+	}
+
+}

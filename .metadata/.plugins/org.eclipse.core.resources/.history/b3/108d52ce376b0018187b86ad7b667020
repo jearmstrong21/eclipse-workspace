@@ -1,0 +1,17 @@
+package co.megadodo.lwjglswingshaderfun;
+
+import java.nio.FloatBuffer;
+
+public class BufferUtils {
+	
+	private BufferUtils() {
+		
+	}
+	
+	public static FloatBuffer createFloatBuffer(Vector3f...v3fs) {
+		FloatBuffer fb=FloatBuffer.allocate(v3fs.length*3);
+		
+		return fb;
+	}
+
+}

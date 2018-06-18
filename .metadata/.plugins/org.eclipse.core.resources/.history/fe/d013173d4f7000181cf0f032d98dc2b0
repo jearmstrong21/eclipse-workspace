@@ -1,0 +1,12 @@
+package co.megadodo.voronoidelaunay;
+
+import java.util.ArrayList;
+
+public class Triangulator {
+	
+	public static ArrayList<Triangle> triangulation(ArrayList<Vector2f> points) {
+		ArrayList<Triangle> tris = new ArrayList<Triangle>();
+		return tris;
+	}
+
+}

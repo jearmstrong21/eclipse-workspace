@@ -1,0 +1,15 @@
+package co.megadodo.voronoidelaunay;
+
+public class Triangle {
+	
+	public Vector2f a;
+	public Vector2f b;
+	public Vector2f c;
+	
+	public Triangle() {
+		
+	}
+	
+	
+
+}

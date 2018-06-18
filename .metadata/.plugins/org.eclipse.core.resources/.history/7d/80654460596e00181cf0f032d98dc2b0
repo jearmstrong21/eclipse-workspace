@@ -1,0 +1,70 @@
+package co.megadodo.shaderfun;
+
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
+import javax.media.opengl.GL3;
+
+public class Shader {
+
+	private static int makeShader(GL3 gl, int type, String typeStr, String source) {
+		int shaderID = gl.glCreateShader(type);
+		gl.glShaderSource(shaderID, 1, new String[] { source }, null);
+		gl.glCompileShader(shaderID);
+		IntBuffer intBuffer = IntBuffer.allocate(1);
+		gl.glGetShaderiv(shaderID, GL3.GL_COMPILE_STATUS, intBuffer);
+		System.out.println("glCompileShader("+typeStr+")=" + intBuffer.get(0));
+
+		if (intBuffer.get(0) == GL3.GL_FALSE) {
+			gl.glGetProgramiv(shaderID, GL3.GL_INFO_LOG_LENGTH, intBuffer);
+			System.out.println("Getting info log\n");
+
+			int size = intBuffer.get(1);
+			if (size > 0) {
+				ByteBuffer byteBuffer = ByteBuffer.allocate(size);
+				gl.glGetProgramInfoLog(shaderID, size, intBuffer, byteBuffer);
+				for (byte b : byteBuffer.array()) {
+					System.err.print((char) b);
+				}
+			} else {
+				System.out.println("Unknown");
+			}
+		}
+		return shaderID;
+	}
+
+	public int programID;
+	public String vertCode;
+	public String fragCode;
+	public String vertFileName;
+	public String fragFileName;
+
+	public Shader() {
+
+	}
+
+	public void loadFiles() {
+		vertCode = FileUtils.loadFile(vertFileName);
+		fragCode = FileUtils.loadFile(fragFileName);
+	}
+
+	public void genProgram(GL3 gl) {
+		int vert=makeShader(gl,GL3.GL_VERTEX_SHADER,"VERTEX",vertCode);
+		int frag=makeShader(gl,GL3.GL_FRAGMENT_SHADER,"FRAGMENT",fragCode);
+		programID=gl.glCreateProgram();
+		gl.glAttachShader(programID, vert);
+		gl.glAttachShader(programID, frag);
+		gl.glLinkProgram(programID);
+		gl.glDeleteShader(vert);
+		gl.glDeleteShader(frag);
+	}
+	
+	public void useProgram(GL3 gl) {
+		gl.glUseProgram(programID);
+	}
+	
+	public void deleteProgram(GL3 gl) {
+		gl.glDeleteProgram(programID);
+	}
+
+}

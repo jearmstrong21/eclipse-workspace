@@ -1,0 +1,11 @@
+{
+name:"Leaf",
+mesh:"Block",
+mat:"Transp",
+xmi:"Leaf",
+xpl:"Leaf",
+ymi:"Leaf",
+ypl:"Leaf",
+zmi:"Leaf",
+zpl:"Leaf"
+}

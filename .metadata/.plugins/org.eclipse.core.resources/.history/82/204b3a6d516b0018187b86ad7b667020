@@ -1,0 +1,54 @@
+package co.megadodo.mathy;
+
+import java.util.ArrayList;
+
+public class MTokenizer {
+
+	public MTokenizer() {
+
+	}
+
+	public static void main() {
+		MTokenizer mt = new MTokenizer();
+		mt.clear();
+		mt.code = "and|t&dads d5hk&d|";
+		ArrayList<String> ar = mt.tokenize();
+		for (String s : ar)
+			System.out.println("<" + s + ">");
+	}
+
+	public String buffer;
+	public String code;
+	public char cur;
+	public ArrayList<String> list;
+
+	public void clear() {
+		cur = ' ';
+		code = "";
+		buffer = "";
+	}
+
+	public ArrayList<String> tokenize() {
+		list = new ArrayList<String>();
+		while (code.length() > 0) {
+			cur = code.charAt(0);
+			code = code.substring(1);
+			if (cur == ' ') {
+				flushBuffer();
+			} else if (cur == '|' || cur == '&' || cur == '(' || cur == ')') {
+				flushBuffer();
+				list.add("" + cur);
+			} else {
+				buffer += cur;
+			}
+
+		}
+		return list;
+	}
+
+	public void flushBuffer() {
+		list.add(buffer);
+		buffer = "";
+	}
+
+}

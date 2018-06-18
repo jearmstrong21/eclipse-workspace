@@ -1,0 +1,147 @@
+package co.megadodo.voronoidelaunay;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class VoronoiDelaunay extends JPanel implements MouseListener {
+
+	public static void main(String[] args) {
+		new VoronoiDelaunay();
+	}
+
+	public JFrame drawFrame;
+
+	public JFrame uiFrame;
+
+	public JPanel pnlDisplaySettings;
+	public JPanel pnlPointSize;
+	public JLabel lblPointSize;
+	public JSlider sldPointSize;
+
+	public VoronoiDelaunay() {
+		drawFrame = new JFrame("Voronoi / Delaunay");
+		drawFrame.setSize(500, 500);
+		drawFrame.add(this);
+		drawFrame.setVisible(true);
+		this.addMouseListener(this);
+
+		uiFrame = new JFrame("Voronoi / Delaunay");
+		uiFrame.setSize(500, 500);
+		uiFrame.setVisible(true);
+
+			pnlDisplaySettings = new JPanel();
+				pnlPointSize = new JPanel();
+					lblPointSize = new JLabel("Point size: ");
+					sldPointSize = new JSlider(0, 15, 3);
+				pnlPointSize.add(lblPointSize);
+				pnlPointSize.add(sldPointSize);
+			pnlDisplaySettings.add(pnlPointSize);
+		
+		uiFrame.add(pnlDisplaySettings);
+
+		
+		addUIListeners();
+	}
+	
+	public void addUIListeners() {
+		sldPointSize.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				repaint();
+			}
+		});
+	}
+
+	ArrayList<Vector2f> points = new ArrayList<Vector2f>();
+	ArrayList<Triangle> tris = new ArrayList<Triangle>();
+
+	public void paint(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		ArrayList<Triangle> tris = Triangulator.triangulation(points);
+
+		g2d.setColor(Color.WHITE);
+		g2d.fillRect(0, 0, 500, 500);
+
+		for (Triangle t : tris) {
+			ArrayList<Vector2f> list = new ArrayList<Vector2f>();
+			list.add(t.a);
+			list.add(t.b);
+			list.add(t.c);
+			boolean cont = false;
+			for (Vector2f v : list) {
+				if (Vector2f.isSame(v, Triangulator.bad1) || Vector2f.isSame(v, Triangulator.bad2)
+						|| Vector2f.isSame(v, Triangulator.bad3)) {
+					cont = true;
+				}
+			}
+			if (cont)
+				continue;
+
+			// Vector2f cc = t.circumcenter();
+			// float cr = t.circumrad();
+			g2d.setColor(Color.BLACK);
+			Line.draw(g2d, t.a, t.b);
+			Line.draw(g2d, t.b, t.c);
+			Line.draw(g2d, t.a, t.c);
+
+			// g2d.setColor(Color.RED);
+			// Line b1 = Line.bisector(t.lineAB(),4);
+			// Line b2 = Line.bisector(t.lineBC(),4);
+			// Line b3 = Line.bisector(t.lineAC(),4);
+			// Line.draw(g2d, b1);
+			// Line.draw(g2d, b2);
+			// Line.draw(g2d, b3);
+			//
+			// g2d.setColor(Color.MAGENTA);
+			// int x = (int)cc.x;
+			// int y = (int)cc.y;
+			// int r = (int)cr;
+			// g2d.drawOval(x - r, y - r, r * 2, r * 2);
+		}
+		for (Vector2f p : points) {
+			g2d.setColor(Color.BLACK);
+			// g2d.fillOval((int)p.x-5, (int)p.y-5, 10, 10);
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		points.add(new Vector2f(e.getX(), e.getY()));
+		repaint();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

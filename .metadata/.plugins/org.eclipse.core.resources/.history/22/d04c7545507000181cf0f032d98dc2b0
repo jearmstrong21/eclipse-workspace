@@ -1,0 +1,17 @@
+package co.megadodo.voronoidelaunay;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class VoronoiDelaunay {
+	
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Voronoi / Delaunay");
+		frame.setSize(500, 500);
+		
+		JPanel panel = new JPanel();
+		
+		frame.setVisible(true);
+	}
+
+}

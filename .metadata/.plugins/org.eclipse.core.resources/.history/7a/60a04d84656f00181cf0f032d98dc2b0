@@ -1,0 +1,5 @@
+package co.megadodo.mathlib;
+
+public class Vec3f {
+
+}

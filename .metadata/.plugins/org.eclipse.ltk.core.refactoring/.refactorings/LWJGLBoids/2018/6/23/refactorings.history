@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;lwjgl-release-3.1.6-custom&apos; to &apos;LWJGLSwingShaderFun&apos;&#x0A;- Original project: &apos;LWJGLBoids&apos;&#x0A;- Destination element: &apos;LWJGLSwingShaderFun&apos;&#x0A;- Original element: &apos;lwjgl-release-3.1.6-custom&apos;" description="Copy folder" destination="=LWJGLSwingShaderFun" element1="lwjgl-release-3.1.6-custom" files="0" flags="589830" folders="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1528411428035" units="0" version="1.0"/>
+</session>

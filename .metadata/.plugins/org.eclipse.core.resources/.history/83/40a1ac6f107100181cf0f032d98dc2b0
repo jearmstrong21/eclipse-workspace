@@ -1,0 +1,85 @@
+package co.megadodo.terraingen1.block;
+
+import com.jme3.math.Vector3f;
+
+import co.megadodo.mcclone1.appstate.AppStateWorld;
+import co.megadodo.terraingen1.mesh.MeshData;
+import co.megadodo.terraingen1.mesh.MeshGenerator;
+
+//A data structure representing a 16x256x16 group of blocks
+public class Chunk {
+	
+	public final static int length=16,height=256;
+	public BlockState[][][] data;
+	
+	public Chunk() {
+		data=new BlockState[16][256][16];
+		for(int x=0;x<16;x++) {
+			for(int y=0;y<256;y++) {
+				for(int z=0;z<16;z++) {
+					data[x][y][z]=null;
+				}
+			}
+		}
+	}
+	
+	public void setColumn(int x, int z, BlockState[] col) {
+		for(int y=0;y<256;y++) {
+			data[x][y][z]=col[y];
+		}
+	}
+	
+	public int sunLightCalc(int x,int theY,int z) {
+		for(int y=theY+1;y<256;y++) {
+			if(data[x][y][z]!=null)return y;
+		}
+		return -1;
+	}
+	
+	//Generates mesh that has a certain material type
+	public MeshData generateMesh(int cx,int cz,MatType mat, Vector3f offset, Chunk xmi,Chunk xpl,Chunk zmi,Chunk zpl,AppStateWorld asw) {
+		MeshData alldata = new MeshData();
+		
+		for(int x=0;x<16;x++) {
+			for(int y=0;y<256;y++) {
+				for(int z=0;z<16;z++) {
+					BlockState b = data[x][y][z];
+					if(b==null)continue;
+					if(b.mat!=mat)continue;
+					BlockSideData bsdata = sideData(x,y,z,xmi,xpl,zmi,zpl);
+					MeshData mdata = MeshGenerator.generateMeshBlock(bsdata, b,new Vector3f(cx*16+x,y,cz*16+z),asw);
+					alldata.addData(mdata, new Vector3f(x,y,z));
+				}
+			}
+		}
+		
+		MeshData offsetdata = new MeshData();
+		offsetdata.addData(alldata, offset);
+		return offsetdata;
+	}
+	
+	//Get blocksidedata for a side given chunks xmi,xpl,zmi,zpl
+	public BlockSideData sideData(int x,int y,int z,Chunk xmi,Chunk xpl,Chunk zmi,Chunk zpl) {
+		BlockState here = data[x][y][z];
+		BlockSideData bsdata = new BlockSideData();
+		bsdata.xmi = BlockState.isAVisibleToB(here, get(x-1,y,z,xmi,xpl,zmi,zpl));
+		bsdata.xpl = BlockState.isAVisibleToB(here, get(x+1,y,z,xmi,xpl,zmi,zpl));
+		bsdata.ymi = BlockState.isAVisibleToB(here, get(x,y-1,z,xmi,xpl,zmi,zpl));
+		bsdata.ypl = BlockState.isAVisibleToB(here, get(x,y+1,z,xmi,xpl,zmi,zpl));
+		bsdata.zmi = BlockState.isAVisibleToB(here, get(x,y,z-1,xmi,xpl,zmi,zpl));
+		bsdata.zpl = BlockState.isAVisibleToB(here, get(x,y,z+1,xmi,xpl,zmi,zpl));
+		return bsdata;
+	}
+	
+	//TODO: figure out whats up with this
+	public BlockState get(int x, int y, int z, Chunk xmi,Chunk xpl,Chunk zmi,Chunk zpl) {
+		if(y<0)return null;
+		if(y>255)return null;
+		if(x<0)return xmi.data[16+x][y][z];
+		if(z<0)return zmi.data[x][y][16+z];
+		if(x>15)return xpl.data[16-x][y][z];
+		if(z>15)return zpl.data[x][y][16-z];
+		return data[x][y][z];
+	}
+
+}

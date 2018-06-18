@@ -1,0 +1,5 @@
+package co.megadodo.voronoidelaunay;
+
+public class Triangulator {
+
+}

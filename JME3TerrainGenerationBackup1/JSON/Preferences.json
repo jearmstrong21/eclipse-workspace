@@ -1,0 +1,19 @@
+{
+	Atlas: "Atlas/AtlasHD.json",
+	WorldGen: "WorldV2/V2.json",
+	Blocks:[
+		"Blocks/Grass.json",
+		"Blocks/Dirt.json",
+		"Blocks/Stone.json",
+		"Blocks/Sand.json",
+		"Blocks/Leaf.json",
+		"Blocks/Water.json",
+		"Blocks/Wood.json",
+		"Blocks/Snow.json"
+	],
+	Render:{
+		Lit:false,
+		ShowNormals:false,
+		Wireframe:false
+	}
+}

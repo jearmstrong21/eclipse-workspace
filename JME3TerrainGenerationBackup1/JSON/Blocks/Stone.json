@@ -1,0 +1,11 @@
+{
+name:"Stone",
+mesh:"Block",
+mat:"Opaque",
+xmi:"Stone",
+xpl:"Stone",
+ymi:"Stone",
+ypl:"Stone",
+zmi:"Stone",
+zpl:"Stone"
+}

@@ -1,0 +1,10 @@
+package co.megadodo.terraingen1.light;
+
+//NONE is no flood-fill, but it will still be calculated
+//REALISTIC is flood-fill
+public enum LightingMethod {
+	
+	NONE,
+	REALISTIC;
+
+}

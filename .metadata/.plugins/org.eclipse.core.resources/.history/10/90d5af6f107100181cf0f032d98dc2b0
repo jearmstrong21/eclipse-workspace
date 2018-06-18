@@ -1,0 +1,17 @@
+package co.megadodo.terraingen1.gen.noise;
+
+import co.megadodo.mcclone1.Utils;
+
+//basically a shortcut to Utils.noisePerlin3
+public class ModulePerlin extends NoiseModule {
+
+	public ModulePerlin() {
+		super(0);
+	}
+
+	@Override
+	public float getValue(float x, float y, float z) {
+		return Utils.noisePerlin3(x, y, z);
+	}
+
+}

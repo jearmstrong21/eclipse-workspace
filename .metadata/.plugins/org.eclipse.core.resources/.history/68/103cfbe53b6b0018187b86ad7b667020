@@ -1,0 +1,63 @@
+package co.megadodo.lwjglswingshaderfun;
+
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL11.*;
+
+import java.nio.*;
+import java.util.ArrayList;
+
+
+public class VertexBuffer {
+	
+	public int vbo;
+	public int vao;
+	public int ebo;
+	
+	public VertexBuffer() {
+		
+	}
+	
+	public void genBuffers(FloatBuffer posFB,FloatBuffer colFB,ByteBuffer triBuffer) {
+		vao=glGenVertexArrays();
+		vbo=glGenBuffers();
+		ebo=glGenBuffers();
+		
+		glBindVertexArray(vao);
+		glBindBuffer(GL_ARRAY_BUFFER,vao);
+		
+		FloatBuffer allData=FloatBuffer.allocate(posFB.capacity()+colFB.capacity());
+		allData.put(posFB);
+		allData.put(colFB);
+		
+		glBufferData(GL_ARRAY_BUFFER, allData, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,triBuffer,GL_STATIC_DRAW);
+	    
+
+	    glEnableVertexAttribArray(0);
+	    int stride1=3;
+	    glVertexAttribPointer(0, 3, GL_FLOAT, false, stride1, posFB);
+
+	    glEnableVertexAttribArray(1);
+	    int stride2=3;
+	    glVertexAttribPointer(1, 3, GL_FLOAT, false, stride2, colFB);
+
+	    glBindVertexArray(0);
+	}
+	
+	public void bindBuffers() {
+
+	    glBindVertexArray(VAO);
+	    glDrawElements(GL_TRIANGLES, tris.size(), GL_UNSIGNED_INT, 0);
+	    glBindVertexArray(0);
+	}
+	
+	public void delBuffers() {
+		glDeleteVertexArrays(vao);
+		glDeleteBuffers(vbo);
+		glDeleteBuffers(ebo);
+	}
+
+}

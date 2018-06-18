@@ -1,0 +1,59 @@
+package co.megadodo.lwjglswingshaderfun;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+import org.lwjgl.*;
+import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.*;
+import org.lwjgl.system.*;
+
+import java.nio.*;
+
+import static org.lwjgl.glfw.Callbacks.*;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL32.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
+
+public class Shader {
+	
+	public long programID;
+	public static String loadFile(String fileName) {
+		String str="";
+		Scanner sc;
+		try {
+			sc = new Scanner(new File(fileName));
+		} catch (FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+			return null;
+		}
+		while(sc.hasNextLine()) {
+			str+=sc.nextLine();
+		}
+		sc.close();
+		return str;
+	}
+	public static int compileShaderSource(long shaderType, String source) {
+		long shaderID=glCreateShader(shaderType);
+	    glShaderSource(shaderID, 1, source, NULL);
+	    glCompileShader(shaderID);
+	    int success;
+	    char infoLog[512];
+	    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
+	    if(!success){
+	        glGetShaderInfoLog(shaderID, 512, NULL, infoLog);
+	        printf("ERROR::SHADER::");
+	        if(shaderType==GL_VERTEX_SHADER)printf("VERTEX");
+	        else if(shaderType==GL_FRAGMENT_SHADER)printf("FRAGMENT");
+	        else printf("NOSHADER");
+	        printf("::COMPILATION_FAILED\n");
+	        printf(infoLog);
+	        printf("\n");
+	        return -1;
+	    }
+	    return shaderID;
+	}
+	
+}

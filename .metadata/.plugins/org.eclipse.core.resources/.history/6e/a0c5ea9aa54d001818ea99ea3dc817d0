@@ -1,0 +1,53 @@
+package co.megadodo.mcclone.mesh;
+
+import com.jme3.math.Vector2f;
+
+import co.megadodo.mcclone.textures.TextureGenerator;
+
+//Texture atlas position
+//_00 is top-left
+//_01 is top-right
+//_10 is bottom-left
+//_11 is bottom-right
+public class AtlasPosition {
+
+	public Vector2f _00;
+	public Vector2f _01;
+	public Vector2f _10;
+	public Vector2f _11;
+	public int x,y;
+
+	// This calculates the texture coordinates for the position (0,0)
+	// Then adds the offset for the specific tile
+	public AtlasPosition(float x, float y) {
+		this.x=(int)x;
+		this.y=(int)y;
+		float w = TextureGenerator.texWidth;
+		float h = TextureGenerator.texHeight;
+		float xfrac = 1f / w;
+		float yfrac = 1f / h;
+		// y=h-y-1;
+
+		_01 = new Vector2f(0, 0);
+		_00 = new Vector2f(0, yfrac);
+		_11 = new Vector2f(xfrac, 0);
+		_10 = new Vector2f(xfrac, yfrac);
+
+		Vector2f offset = new Vector2f(x * xfrac, y * yfrac);
+		_00 = _00.add(offset);
+		_10 = _10.add(offset);
+		_01 = _01.add(offset);
+		_11 = _11.add(offset);
+
+//		System.out.println(_00);
+//		System.out.println(_01);
+//		System.out.println(_10);
+//		System.out.println(_11);
+
+		// _00=new Vector2f(0,0);
+		// _10=new Vector2f(1,0);
+		// _01=new Vector2f(0,1);
+		// _11=new Vector2f(1,1);
+	}
+
+}

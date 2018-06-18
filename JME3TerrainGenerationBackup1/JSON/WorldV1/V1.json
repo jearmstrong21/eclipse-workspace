@@ -1,0 +1,12 @@
+{
+heightSamples: 1,
+Biomes: [
+"WorldV1/Biome2.json",
+"WorldV1/Biome1.json"
+],
+params: [
+	{name: "Biome1HeightMap", type: "noise"},
+	{name: "Biome2HeightMap", type: "noise"},
+	{name: "BiomeMap", type: "noise"}
+]
+}

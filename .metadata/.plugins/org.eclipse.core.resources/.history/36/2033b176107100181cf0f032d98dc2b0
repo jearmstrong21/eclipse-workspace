@@ -1,0 +1,29 @@
+package co.megadodo.terraingen1.config;
+
+import co.megadodo.mcclone.gen.AbstractChunkProvider;
+import co.megadodo.mcclone.gen.mine1.ChunkProviderMine1;
+import co.megadodo.mcclone.light.AmbientMethod;
+import co.megadodo.mcclone.light.LightingMethod;
+import co.megadodo.mcclone.light.SunlightMethod;
+
+//Config file
+//TODO: load from json file? prob no
+public class JME3TerrainGenerationConfig {
+	
+	//Lighting stuff
+	public static LightingMethod lightingMethod;
+	public static AmbientMethod ambientMethod;
+	public static SunlightMethod sunlightMethod;
+	
+	//Chunk provider
+	public static Class<? extends AbstractChunkProvider> chunkProvider;
+	
+	static {
+		lightingMethod=LightingMethod.REALISTIC;
+		ambientMethod=AmbientMethod.BRIGHT;
+		sunlightMethod=SunlightMethod.MODERATE;
+		chunkProvider=ChunkProviderMine1.class;
+//		chunkProvider=ChunkProviderMine2.class;
+	}
+
+}

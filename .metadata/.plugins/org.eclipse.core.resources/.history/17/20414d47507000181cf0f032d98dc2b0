@@ -1,0 +1,18 @@
+package co.megadodo.voronoidelaunay;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class VoronoiDelaunay {
+	
+	public static void main(String[] args) {
+		new VoronoiDelaunay();
+	}
+	
+	public JFrame frame;
+	
+	public VoronoiDelaunay() {
+		
+	}
+
+}

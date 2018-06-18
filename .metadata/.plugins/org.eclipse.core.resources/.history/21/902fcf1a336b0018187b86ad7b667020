@@ -1,0 +1,22 @@
+package co.megadodo.lwjglswingshaderfun;
+
+import java.util.ArrayList;
+
+import static org.lwjgl.opengl.GL32.*;
+
+
+public class VertexBuffer {
+	
+	public int vbo;
+	public int vao;
+	public int ebo;
+	
+	public VertexBuffer() {
+		
+	}
+	
+	public void genBuffers(ArrayList<Vertex>list) {
+		glGenVertexArray
+	}
+
+}

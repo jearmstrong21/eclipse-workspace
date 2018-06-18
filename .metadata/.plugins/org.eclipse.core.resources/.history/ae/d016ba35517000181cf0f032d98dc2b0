@@ -1,0 +1,62 @@
+package co.megadodo.voronoidelaunay;
+
+import java.util.ArrayList;
+
+public class Triangulator {
+	
+	public static ArrayList<Triangle> triangulation(ArrayList<Vector2f> points) {
+		ArrayList<Triangle> tris = new ArrayList<Triangle>();
+		
+		Vector2f bad1 = new Vector2f(0, 0);
+		Vector2f bad2 = new Vector2f(10000, 0);
+		Vector2f bad3 = new Vector2f(0, 10000);
+		
+		Triangle bad = new Triangle(bad1, bad2, bad3);
+		
+		tris.add(bad);
+		
+		for(Vector2f point : points) {
+			ArrayList<Triangle> badTris = new ArrayList<Triangle>();
+			for(Triangle tri : tris) {
+				Vector2f cc = tri.circumcenter();
+				float cr = tri.circumrad();
+				if(Vector2f.dist(cc, point) < cr) {
+					badTris.add(tri);
+				}
+			}
+			ArrayList<Line> allLines = new ArrayList<Line>();
+			ArrayList<Line> polygon = new ArrayList<Line>();
+			for(Triangle t : badTris) {
+				allLines.add(t.lineAB());
+				allLines.add(t.lineBC());
+				allLines.add(t.lineAC());
+			}
+			for(Line l : allLines) {
+				int n = 0;
+				for(Line l1 : allLines) {
+					if(l.equals(l1)) {
+						n++;
+					}
+				}
+				if(n == 1) {
+					polygon.add(l);
+				}
+			}
+			for(Line l : polygon) {
+				tris.add(new Triangle(point, l.a, l.b));
+			}
+			tris.removeAll(badTris);
+		}
+//		ArrayList<Triangle> extTris = new ArrayList<Triangle>();
+//		for(Triangle t : tris) {
+//			if(t.a.equals(bad1)||t.a.equals(bad2)||t.a.equals(bad3)
+//					||t.b.equals(bad1)||t.b.equals(bad2)||t.b.equals(bad3)
+//					||t.c.equals(bad1)||t.c.equals(bad2)||t.c.equals(bad3)) {
+//				extTris.add(t);
+//			}
+//		}
+//		tris.removeAll(extTris);
+		return tris;
+	}
+
+}

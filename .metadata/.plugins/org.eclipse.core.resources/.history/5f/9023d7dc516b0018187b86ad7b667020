@@ -1,0 +1,14 @@
+package co.megadodo.mathy;
+
+
+
+public class Mathy {
+
+	public static void main(String[]args) {
+		
+	}
+
+	public Mathy() {
+	}
+
+}

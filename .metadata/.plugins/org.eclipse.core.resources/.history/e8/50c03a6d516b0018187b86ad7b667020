@@ -1,0 +1,14 @@
+package co.megadodo.mathy;
+
+public class MOperator{
+	
+	public String name;
+	public MOperator(String name) {
+		this.name=name;
+	}
+	
+	public static boolean isOperator(String str) {
+		return str.equals("cos")||str.equals("sin");
+	}
+
+}

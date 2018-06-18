@@ -1,0 +1,31 @@
+package co.megadodo.hellojogamp;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
+import com.jogamp.opengl.GL4;
+
+public class VAO {
+
+	public int vao;
+	
+	public VAO() {
+		
+	}
+	
+	public FloatBuffer allData;
+	public IntBuffer triData;
+	
+	public void genBuffers(GL4 gl,FloatBuffer allData, IntBuffer triData) {
+		this.allData=allData;
+		this.triData=triData;
+		
+		IntBuffer vaoBuffer=IntBuffer.allocate(1);
+		gl.glGenVertexArrays(1, vaoBuffer);
+		vao=vaoBuffer.get(0);
+		
+		IntBuffer vboPosBuffer=IntBuffer.allocate(1);
+		
+	}
+	
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;co.megadodo.voronoidelaunay.Vector3f&apos; to &apos;Vector2f&apos;&#x0A;- Original project: &apos;VoronoiDelaunay&apos;&#x0A;- Original element: &apos;co.megadodo.voronoidelaunay.Vector3f&apos;&#x0A;- Renamed element: &apos;co.megadodo.voronoidelaunay.Vector2f&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Vector3f&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;co.megadodo.voronoidelaunay{Vector3f.java[Vector3f" matchStrategy="1" name="Vector2f" qualified="false" references="true" similarDeclarations="false" stamp="1529033964997" textual="false" version="1.0"/>
+</session>

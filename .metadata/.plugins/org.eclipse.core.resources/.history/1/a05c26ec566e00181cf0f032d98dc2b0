@@ -1,0 +1,19 @@
+package co.megadodo.shaderfun;
+
+import javax.media.opengl.GL3;
+
+public class VertexBuffer {
+	
+	public int vao;
+	public int vbo;
+	public int ebo;
+	
+	public VertexBuffer() {
+		
+	}
+	
+	public void genBuffers(GL3 gl) {
+		
+	}
+
+}

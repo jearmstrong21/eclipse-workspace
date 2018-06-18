@@ -1,0 +1,110 @@
+package co.megadodo.hellojogamp;
+
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.nio.IntBuffer;
+
+import com.jogamp.opengl.GL4;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.util.FPSAnimator;
+
+import glm.mat._4.Mat4;
+import glm.vec._3.Vec3;
+
+public class HelloJOGAMP implements GLEventListener {
+	
+	double theta=0;
+	float[]xs,ys,zs;
+	public static void main(String[]args) {
+		GLProfile glp=GLProfile.get(GLProfile.GL4);
+		GLCapabilities caps=new GLCapabilities(glp);
+		GLCanvas canvas=new GLCanvas(caps);
+		Frame frame=new Frame("Spinning Triangle");
+		frame.setSize(400,400);
+		frame.add(canvas);
+		frame.setVisible(true);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+		canvas.addGLEventListener(new HelloJOGAMP());
+		FPSAnimator animator=new FPSAnimator(canvas, 60);
+//		animator.add(canvas);
+		animator.start();
+	}
+	
+	public void display(GLAutoDrawable drawable) {
+		update();
+		render(drawable);
+	}
+	
+	public void dispose(GLAutoDrawable drawable) {
+		GL4 gl=(GL4)drawable.getGL();
+		shader.delProgram(gl);
+	}
+	
+	ShaderProgram shader;
+	VAO vao;
+	float[]floatData=new float[] {-1,-1,-1,0,0,0,   -1,-1,1,0,0,1,   -1,1,1,0,1,1,  -1,1,-1,0,1,0};
+	int[]triData=new int[] {0,1,2,0,2,3};
+	
+	public void init(GLAutoDrawable drawable) {
+		GL4 gl = (GL4)drawable.getGL();
+		
+		String version=gl.glGetString(GL4.GL_VERSION);
+		String vendor=gl.glGetString(GL4.GL_VENDOR);
+		String glslVersion=gl.glGetString(GL4.GL_SHADING_LANGUAGE_VERSION);
+		String renderer=gl.glGetString(GL4.GL_RENDERER);
+		IntBuffer bufferMajor=IntBuffer.allocate(1);
+		IntBuffer bufferMinor=IntBuffer.allocate(1);
+		gl.glGetIntegerv(GL4.GL_MAJOR_VERSION, bufferMajor);
+		gl.glGetIntegerv(GL4.GL_MINOR_VERSION, bufferMinor);
+		int major=bufferMajor.get(0);
+		int minor=bufferMinor.get(0);
+		
+		System.out.println("Version: "+version);
+		System.out.println("Vendor: "+vendor);
+		System.out.println("GLSL Version: "+glslVersion);
+		System.out.println("Renderer: "+renderer);
+		System.out.println("Major version: "+major);
+		System.out.println("Minor version: "+minor);
+		
+		//maybe name gl framework GLEZ (gl ez, gl easy)
+		
+		shader=new ShaderProgram();
+		shader.genProgramFiles(gl, "Shaders/shader.vert", "Shaders/shader.frag");
+		
+		vao=new VAO();
+		vao.genBuffers(gl,floatData,triData);
+	}
+	
+	public void reshape(GLAutoDrawable drawable,int x,int y,int w,int h) {
+		
+	}
+	
+	public void update() {
+		
+	}
+	float time=0;
+	public void render(GLAutoDrawable drawable) {
+		time++;
+		GL4 gl = (GL4)drawable.getGL();
+		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		gl.glClear(GL4.GL_DEPTH_BUFFER_BIT|GL4.GL_COLOR_BUFFER_BIT);
+		shader.bindProgram(gl);
+		Mat4 mat4=new Mat4();
+		mat4.rotate(time*0.01f, new Vec3(1, 0, 0));
+		mat4.rotate(time*0.02f, new Vec3(0, 1, 0));
+		mat4.rotate(time*0.03f, new Vec3(0, 0, 1));
+		mat4.translate(new Vec3(0,0,-1));
+		shader.uniformMat4(gl, "Matrix", mat4);
+		vao.render(gl);
+	}
+
+}

@@ -1,0 +1,11 @@
+{
+name:"Water",
+mesh:"Block",
+mat:"Transp",
+xmi:"Water",
+xpl:"Water",
+ymi:"Water",
+ypl:"Water",
+zmi:"Water",
+zpl:"Water"
+}

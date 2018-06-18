@@ -1,0 +1,9 @@
+package co.megadodo.terraingen1.block;
+
+//BlockState mesh type
+//TODO: add support for flower/stair meshes?
+public enum MeshType {
+	
+	Block;
+
+}

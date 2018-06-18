@@ -1,0 +1,22 @@
+package co.megadodo.terraingen1.gen.noise;
+
+import co.megadodo.terraingen1.Utils;
+
+//Ridge noise from perlin noise
+public class ModuleRidge extends NoiseModule {
+
+	public ModuleRidge() {
+		super(1);
+		setSourceModule(0, new ModulePerlin());
+	}
+
+	@Override
+	public float getValue(float x, float y, float z) {
+		float val = getSourceModule(0).getValue(x, y, z);
+		val = Utils.map(val, 0, 1, -0.5f, 0.5f);
+		val = Utils.abs(val);
+		val = Utils.map(val, 0, 0.5f, 0, 1);
+		return val;
+	}
+
+}

@@ -1,0 +1,57 @@
+package co.megadodo.hellojogamp;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
+import com.jogamp.opengl.GL4;
+
+public class VAO {
+
+	public int vao;
+	public int vbo;
+	public int ebo;
+
+	public VAO() {
+
+	}
+	
+	public float[]floatData;
+	public int[]triData;
+
+	public void genBuffers(GL4 gl,float[]floatData,int[]triData) {
+		this.floatData=floatData;
+		this.triData=triData;
+		IntBuffer intBuffer=IntBuffer.allocate(1);
+		
+		gl.glGenVertexArrays(1, intBuffer);
+		vao=intBuffer.get(0);
+		
+		gl.glGenBuffers(1, intBuffer);
+		vbo=intBuffer.get(0);
+		
+		gl.glGenBuffers(1, intBuffer);
+		ebo=intBuffer.get(0);
+		
+		gl.glBindVertexArray(vao);
+		
+		gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, vbo);
+		gl.glBufferData(GL4.GL_ARRAY_BUFFER, floatData.length*Float.BYTES, FloatBuffer.wrap(floatData), GL4.GL_STATIC_DRAW);
+		
+		gl.glBindBuffer(GL4.GL_ELEMENT_ARRAY_BUFFER, ebo);
+		gl.glBufferData(GL4.GL_ELEMENT_ARRAY_BUFFER, triData.length*Integer.BYTES,IntBuffer.wrap(triData),GL4.GL_STATIC_DRAW);
+		
+		gl.glEnableVertexAttribArray(0);
+		gl.glVertexAttribPointer(0, 3, GL4.GL_FLOAT, false, 3*Float.BYTES, 0);
+		
+		gl.glBindVertexArray(0);
+        System.out.println("VAO gen, vao="+vao+", vbo="+vbo+", ebo="+ebo);
+	}
+
+	public void render(GL4 gl) {
+		gl.glBindVertexArray(vao); // seeing as we only have a single vao there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        gl.glDrawElements(GL4.GL_TRIANGLES, triData.length, GL4.GL_UNSIGNED_INT, 0);
+        gl.glBindVertexArray(0);
+	}
+
+}

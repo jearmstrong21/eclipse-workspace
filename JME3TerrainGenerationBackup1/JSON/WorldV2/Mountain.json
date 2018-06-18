@@ -1,0 +1,35 @@
+{
+top:{
+	type:"literal",
+	value:"Stone"
+},
+mid:{
+	type:"literal",
+	value:"Stone"
+},
+bot:{
+	type:"literal",
+	value:"Stone"
+},
+heightMap:{
+	type:"noise2",
+	name:"Mountain",
+	zoom:1,
+	min:90,
+	max:150
+},
+canExist:{
+	type:"less",
+	a:{
+		type:"noise2",
+		name:"BiomeMap",
+		zoom:0.5,
+		min:0,
+		max:2
+	},
+	b:{
+		type:"literal",
+		value:2
+	}
+}
+}

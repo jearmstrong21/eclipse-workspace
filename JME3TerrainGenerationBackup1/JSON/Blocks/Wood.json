@@ -1,0 +1,11 @@
+{
+name:"Wood",
+mesh:"Block",
+mat:"Opaque",
+xmi:"WoodSide",
+xpl:"WoodSide",
+ymi:"WoodTop",
+ypl:"WoodTop",
+zmi:"WoodSide",
+zpl:"WoodSide"
+}

@@ -1,0 +1,164 @@
+package co.megadodo.mcclone;
+
+import com.jme3.app.SimpleApplication;
+import com.jme3.asset.plugins.FileLocator;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.post.FilterPostProcessor;
+//import com.jme3.post.filters.ColorOverlayFilter;
+import com.jme3.system.AppSettings;
+import com.jme3.texture.Texture;
+import com.jme3.texture.Texture.MagFilter;
+import com.jme3.texture.Texture.MinFilter;
+import com.jme3.util.SkyFactory;
+import com.shaderblow.filter.basicssao.BasicSSAO;
+import com.shaderblow.filter.circularfading.CircularFadingFilter;
+import com.shaderblow.filter.colorscale.ColorScaleFilter;
+import com.shaderblow.filter.frostedglass.FrostedGlassFilter;
+import com.shaderblow.filter.motionblur.MotionBlurFilter;
+import com.shaderblow.filter.nightvision.NightVisionFilter;
+import com.shaderblow.filter.oldfilm.OldFilmFilter;
+import com.shaderblow.filter.pixelation.PixelationFilter;
+import com.shaderblow.filter.predatorvision.PredatorVisionFilter;
+import com.shaderblow.lightblow.CartoonEdgeProcessor;
+
+import co.megadodo.terraingen1.appstate.AppStateGUI;
+import co.megadodo.terraingen1.appstate.AppStateWorld;
+
+//Main application
+public class TerrainGeneration extends SimpleApplication {
+	
+	//Global instance
+	public static TerrainGeneration tg;
+
+	//Main
+	//Initializes settings
+	//Starts application
+	public static void main(String[] args) {
+		AppSettings settings = new AppSettings(true);
+		settings.setMinWidth(640);
+		settings.setMinHeight(480);
+		settings.setWidth(1024);
+		settings.setHeight(768);
+		settings.setTitle("Terrain Generation");
+		TerrainGeneration app = new TerrainGeneration();
+		app.setSettings(settings);
+		tg = app;
+		app.start();
+	}
+
+	//Texture atlas
+	public Texture atlasTex;
+	//Opaque material
+	public Material matOpaque;
+	//Transparent material
+	public Material matTransp;
+	
+	//Commented out, no need for frame-tracking
+	//That is in AppStateGUI now
+//	float totaltpf=0;
+//	public void simpleUpdate(float tpf) {
+//		totaltpf+=tpf;
+//		LightingManager.sunlightLevel=FastMath.sin(totaltpf)*8+8;
+//	}
+	
+	//Initialize app
+	@Override
+	public void simpleInitApp() {
+		
+		//Register asset locator in "Images/" directory
+		assetManager.registerLocator("Images/", FileLocator.class);
+		
+		//Load texture atlas
+		atlasTex=assetManager.loadTexture("MyAtlas/MinecraftAtlas.png");
+		
+		//Remove bilinear interpolation of pixels, remove mipmaps
+		atlasTex.setMagFilter(MagFilter.Nearest);
+		atlasTex.setMinFilter(MinFilter.NearestNoMipMaps);
+		
+		//Colormap is unshaded texture
+		//Custom lighting algorithm
+		//VertexColor is for shading faces
+		
+		//Init transparent material
+		//TODO: This does not actually be transparent?
+		//TODO: Add transparency to blockstates.
+		matTransp = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+		matTransp.setTexture("ColorMap", atlasTex);
+		matTransp.setBoolean("VertexColor", true);
+		
+		//Init opaque material
+		matOpaque = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+		matOpaque.setTexture("ColorMap", atlasTex);
+		matOpaque.setBoolean("VertexColor", true);	
+		
+		
+		//Disable default GUI
+		setDisplayFps(false);
+		setDisplayStatView(false);
+		
+		//This adds JME3 light, not needed
+//		AppStateLight asl = new AppStateLight();
+//		asl.simpleApp = this;
+//		stateManager.attach(asl);
+		
+		//This instantiates chunks and listens to input
+		AppStateWorld asw = new AppStateWorld();
+		asw.tg = this;
+		stateManager.attach(asw);
+		
+		
+		//This displays GUI
+		AppStateGUI asg = new AppStateGUI();
+		asg.font = guiFont;
+		asg.width = settings.getWidth();
+		asg.height = settings.getHeight();
+		asg.guiNode = guiNode;
+		asg.cam = cam;
+		stateManager.attach(asg);
+	
+		//Add sky
+		rootNode.attachChild(SkyFactory.createSky(assetManager, "Sky/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
+		
+		//Movespeed
+		flyCam.setMoveSpeed(50);
+		
+		FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
+//		cof=new ColorScaleFilter(ColorRGBA.Blue,0.5f);
+//		PredatorVisionFilter pvf=new PredatorVisionFilter();
+//		PixelationFilter pf=new PixelationFilter();
+//		pf.setPixelWidth(2);
+//		pf.setPixelHeight(2);
+//		OldFilmFilter off=new OldFilmFilter();
+//		NightVisionFilter nvf=new NightVisionFilter();
+		MotionBlurFilter mbf=new MotionBlurFilter();
+		mbf.setBlurSamples(2);
+//		FrostedGlassFilter fgf=new FrostedGlassFilter();
+//		CircularFadingFilter cff=new CircularFadingFilter(cam, target)
+//		BasicSSAO bssao=new BasicSSAO(2, 0.5f, 30, 0.5f);
+		
+//		CartoonEdgeProcessor cep=new CartoonEdgeProcessor();
+		
+		
+//		fpp.addFilter(cof);
+//		fpp.addFilter(pvf);
+//		fpp.addFilter(pf);
+//		fpp.addFilter(off);
+//		fpp.addFilter(nvf);
+		fpp.addFilter(mbf);
+//		fpp.addFilter(fgf);
+//		fpp.addFilter(bssao);
+//		viewPort.addProcessor(cep);
+		viewPort.addProcessor(fpp);
+	}
+	@Override
+	public void simpleUpdate(float tpf) {
+//		if(cam.getLocation().y>83) {
+//			cof.setColorDensity(0);
+//		}else {
+//			cof.setColorDensity(0.5f);
+//		}
+	}
+	ColorScaleFilter cof;
+
+}

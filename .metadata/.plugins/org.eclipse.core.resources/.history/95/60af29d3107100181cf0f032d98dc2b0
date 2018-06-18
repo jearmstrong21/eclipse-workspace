@@ -1,0 +1,13 @@
+package co.megadodo.mcclone.block;
+
+public class Blocks {
+	
+	public static BlockState grass,dirt,stone;
+	
+	static {
+		grass=new BlockState();
+		dirt=new BlockState();
+		stone=new BlockState();
+	}
+
+}

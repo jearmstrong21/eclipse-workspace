@@ -1,0 +1,38 @@
+package co.megadodo.mcclone.gen.mine1;
+
+import com.jme3.math.Vector3f;
+
+import co.megadodo.mcclone.block.BlockState;
+
+//A pair with cx,cz and xinchunk,yinchunk,zinchunk
+//Used for things like trees
+public class BlockPair {
+	
+	public Vector3f pos;
+	public BlockState bl;
+	public int cx,cz,rx,ry,rz;
+	public void updatePos() {
+		rx=(int)pos.x;
+		ry=(int)pos.y;
+		rz=(int)pos.z;
+		cx=rx%16;
+		cz=rz%16;
+		while(rx<0) {
+			rx+=16;
+			cx--;
+		}
+		while(rz<0) {
+			rz+=16;
+			cz--;
+		}
+		while(rx>15) {
+			rx-=15;
+			cx++;
+		}
+		while(rz>15) {
+			rz-=15;
+			cz++;
+		}
+	}
+
+}

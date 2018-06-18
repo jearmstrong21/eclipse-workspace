@@ -1,0 +1,42 @@
+package co.megadodo.mathy;
+
+import java.util.ArrayList;
+
+public class MTokenizer {
+	
+	public MTokenizer() {
+		
+	}
+	
+	public String buffer;
+	public String code;
+	public char cur;
+	public ArrayList<String>list;
+	
+	public void clear() {
+		cur=' ';
+		code="";
+		buffer="";
+	}
+	
+	public ArrayList<String>tokenize(){
+		list=new ArrayList<String>();
+		while(code.length()>0) {
+			cur=code.charAt(0);
+			code=code.substring(1);
+			if(cur==' ') {
+				flushBuffer();
+			}
+			if(cur=='|'||cur=='&'||cur=='t'||cur=='f') {
+				flushBuffer();
+			}
+		}
+		return list;
+	}
+	
+	public void flushBuffer() {
+		list.add(buffer);
+		buffer=" ";
+	}
+
+}

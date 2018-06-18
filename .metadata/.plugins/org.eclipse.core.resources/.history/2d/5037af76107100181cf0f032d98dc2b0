@@ -1,0 +1,9 @@
+package co.megadodo.terraingen1.block;
+
+//BlockState material type
+public enum MatType {
+	
+	Opaque,
+	Transparent;
+
+}

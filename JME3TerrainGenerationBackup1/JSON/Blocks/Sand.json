@@ -1,0 +1,11 @@
+{
+name: "Sand",
+mesh: "Block",
+mat: "Opaque",
+xmi: "Sand",
+xpl: "Sand",
+ymi: "Sand",
+ypl: "Sand",
+zmi: "Sand",
+zpl: "Sand"
+}

@@ -1,0 +1,10 @@
+package co.megadodo.mathy;
+
+public class MOperator{
+	
+	public String name;
+	public MOperator(String name) {
+		this.name=name;
+	}
+
+}

@@ -1,0 +1,72 @@
+package co.megadodo.lwjglswingshaderfun;
+
+import static org.lwjgl.opengl.GL20.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+import static org.lwjgl.opengl.GL11.*;
+
+public class Shader {
+	
+	public int programID;
+	public String vertCode;
+	public String fragCode;
+	public String vertFileName;
+	public String fragFileName;
+	
+	public Shader() {
+		
+	}
+	
+	public void loadFiles() {
+		vertCode=loadFile(vertFileName);
+		fragCode=loadFile(fragFileName);
+	}
+	
+	public void compileProgram() {
+		int vert=compileShaderSource(GL_VERTEX_SHADER,vertCode);
+		int frag=compileShaderSource(GL_FRAGMENT_SHADER,fragCode);
+		programID=glCreateProgram();
+		glAttachShader(programID, vert);
+		glAttachShader(programID, frag);
+		glLinkProgram(programID);
+		String infoLog=glGetProgramInfoLog(programID,glGetProgrami(programID, GL_INFO_LOG_LENGTH));
+		if(glGetProgrami(programID,GL_LINK_STATUS)==GL_FALSE) {
+			throw new RuntimeException("Failure in linking program:\n"+infoLog);
+		}
+	}
+	
+	public static String loadFile(String fileName) {
+		String str="";
+		Scanner sc;
+		try {
+			sc = new Scanner(new File(fileName));
+		} catch (FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+			return null;
+		}
+		while(sc.hasNextLine()) {
+			str+=sc.nextLine();
+		}
+		sc.close();
+		return str;
+	}
+	public static int compileShaderSource(int shaderType, String source) {
+		int shader=glCreateShader(shaderType);
+		glShaderSource(shader, source);
+		glCompileShader(shader);
+		String infoLog=glGetShaderInfoLog(shader,glGetShaderi(shader, GL_INFO_LOG_LENGTH));
+		String strType="None";
+		if(infoLog!=null&&infoLog.trim().length()!=0) {
+			if(shaderType==GL_FRAGMENT_SHADER)strType="Fragment";
+			if(shaderType==GL_VERTEX_SHADER)strType="Vertex";
+		}
+		if(glGetShaderi(shader, GL_COMPILE_STATUS)==GL_FALSE) {
+			throw new RuntimeException("Failure in compiling "+strType+":\n"+infoLog);
+		}
+		return shader;
+	}
+	
+}

@@ -1,0 +1,25 @@
+package co.megadodo.hellojogamp;
+
+import java.nio.IntBuffer;
+
+import com.jogamp.opengl.GL4;
+
+public class ShaderProgram {
+	
+	public ShaderProgram() {
+		
+	}
+	
+	public static int compileShader(GL4 gl, int type, String typeStr, String source) {
+		int shaderID=gl.glCreateShader(type);
+		gl.glShaderSource(shaderID, 1, new String[] {source}, null);
+		gl.glCompileShader(shaderID);
+		IntBuffer buffer=IntBuffer.allocate(1);
+		gl.glGetShaderiv(shaderID, GL4.GL_COMPILE_STATUS, buffer);
+		if(buffer.get(0)==GL4.GL_FALSE) {
+			IntBuffer infoBuffer=null;
+			gl.glGetShaderInfoLog(shaderID, 512, null, infoBuffer);
+		}
+	}
+
+}

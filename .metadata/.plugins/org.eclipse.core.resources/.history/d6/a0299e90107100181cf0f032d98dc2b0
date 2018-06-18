@@ -1,0 +1,25 @@
+package co.megadodo.mcclone.gen;
+
+import java.util.ArrayList;
+
+import co.megadodo.mcclone.block.BlockState;
+import co.megadodo.mcclone.block.Chunk;
+
+//Abstract chunk provider
+public class ChunkProvider {
+	
+	//Called immediately after constructed
+	public abstract void initialize();
+	
+	//These methods are called exactly when it seems.
+	public abstract void onChunkRemoveBefore(int cx, int cz);
+	public abstract void onChunkRemoveAfter(int cx, int cz);
+	public abstract boolean canChunkRemove(int cx, int cz);
+
+	public abstract void onChunkAddBefore(int cx, int cz);
+	public abstract void onChunkAddAfter(int cx, int cz);
+	public abstract boolean canChunkAdd(int cx, int cz);
+	
+	public abstract Chunk makeChunk(int cx, int cz, ArrayList<BlockState> bls);
+
+}

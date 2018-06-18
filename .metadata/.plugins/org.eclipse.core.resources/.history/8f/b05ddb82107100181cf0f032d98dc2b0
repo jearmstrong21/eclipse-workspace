@@ -1,0 +1,265 @@
+package co.megadodo.mcclone.gen.mine1;
+
+import com.jme3.math.ColorRGBA;
+
+import co.megadodo.mcclone.AtlasPosition;
+import co.megadodo.mcclone.block.Block;
+import co.megadodo.mcclone.block.BlockState;
+import co.megadodo.mcclone.block.MatType;
+import co.megadodo.mcclone.block.MeshType;
+
+//This manages all the blockstates
+//and textures.
+public class Blocks {
+	
+	public static Block GRASS,DIRT,STONE,LOG_OAK,LEAVES_OAK,SAND,WATER,LOG_BIRCH,LEAVES_BIRCH,LOG_JUNGLE,LEAVES_JUNGLE,SNOW;
+	
+	private static AtlasPosition grassTop,grassSide,logOakTop,logOakSide,leavesOak,logBirchSide,logBirchTop,leavesBirch,logJungleSide,logJungleTop,leavesJungle,sand,water;
+	private static AtlasPosition snowTop,snowSide;
+	private static AtlasPosition stone;
+	private static AtlasPosition dirt;
+	
+	static {
+		int w=32;
+		int h=32;
+		grassTop=new AtlasPosition(0,0,w,h);
+		grassSide=new AtlasPosition(1,0,w,h);
+		logOakTop=new AtlasPosition(0,2,w,h);
+		logOakSide=new AtlasPosition(0,1,w,h);
+		leavesOak=new AtlasPosition(0,5,w,h);
+		stone=new AtlasPosition(31,0,w,h);
+		dirt=new AtlasPosition(14,0,w,h);
+		sand=new AtlasPosition(26,31,w,h);
+		water=new AtlasPosition(15,15,w,h);
+		logBirchTop=new AtlasPosition(1,2,w,h);
+		logBirchSide=new AtlasPosition(1,1,w,h);
+		leavesBirch=new AtlasPosition(1,5,w,h);
+		logJungleTop=new AtlasPosition(5,2,w,h);
+		logJungleSide=new AtlasPosition(5,1,w,h);
+		leavesJungle=new AtlasPosition(5,5,w,h);
+		snowTop=new AtlasPosition(2,0,w,h);
+		snowSide=new AtlasPosition(3,0,w,h);
+		SNOW=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs=new BlockState();
+				bs.setTexture(snowSide);
+				bs.ypl=snowTop;
+				bs.ymi=dirt;
+				bs.mat=MatType.Opaque;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		SAND=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs=new BlockState();
+				bs.setTexture(sand);
+				bs.mat=MatType.Transparent;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		WATER=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs=new BlockState();
+				bs.setTexture(water);
+				bs.mat=MatType.Transparent;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		LEAVES_OAK=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+				bs.setTexture(leavesOak);
+				bs.setColor(ColorRGBA.Green);
+				bs.mat=MatType.Transparent;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		LOG_OAK=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+				bs.xmi=bs.xpl=bs.zmi=bs.zpl=logOakSide;
+//				bs.setTexture(oakSide);
+//				bs.setColor(ColorRGBA.Green);
+				bs.ymi=bs.ypl=logOakTop;
+				bs.mat=MatType.Opaque;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		LEAVES_BIRCH=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+				bs.setTexture(leavesBirch);
+				bs.setColor(ColorRGBA.Green);
+				bs.mat=MatType.Transparent;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		LOG_BIRCH=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+				bs.xmi=bs.xpl=bs.zmi=bs.zpl=logBirchSide;
+//				bs.setTexture(oakSide);
+				bs.ymi=bs.ypl=logBirchTop;
+				bs.mat=MatType.Opaque;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		LEAVES_JUNGLE=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+				bs.setTexture(leavesJungle);
+				bs.setColor(ColorRGBA.Green);
+				bs.mat=MatType.Transparent;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		LOG_JUNGLE=new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+				bs.xmi=bs.xpl=bs.zmi=bs.zpl=logJungleSide;
+//				bs.setTexture(oakSide);
+				bs.ymi=bs.ypl=logJungleTop;
+				bs.mat=MatType.Opaque;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		STONE = new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+//				int ind = (int)(Math.random()*stones.length);
+//				bs.setTexture(stones[ind]);
+				bs.setTexture(stone);
+				bs.mat=MatType.Opaque;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		
+		DIRT = new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				return getDefaultState();
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+//				int ind = (int)(Math.random()*dirts.length);
+//				bs.setTexture(dirts[ind]);
+				bs.setTexture(dirt);
+				bs.mat=MatType.Opaque;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+		
+		GRASS = new Block() {
+			
+			@Override
+			public BlockState getState(String name) {
+				BlockState state = getDefaultState();
+				ColorRGBA col=ColorRGBA.White;
+				if(name.equals("Mountain"))col=(new ColorRGBA(141f/255f,179f/255f,96/255f,1f));//mountain grass
+				else if(name.equals("Savanna"))col=new ColorRGBA(0.74f,0.7f,0.37f,1f);
+				else if(name.equals("Forest"))col=new ColorRGBA(0.1f,0.7f,0f,1f);
+				else col=(new ColorRGBA(141f/255f,179f/255f,96/255f,1f));
+				state.cypl=col;
+				return state;
+			}
+			
+			@Override
+			public BlockState getDefaultState() {
+				BlockState bs = new BlockState();
+				bs.setTexture(grassSide);
+				bs.ypl=grassTop;
+//				int ind = (int)(Math.random()*dirts.length);
+//				bs.ymi=dirts[ind];
+				bs.ymi=dirt;
+				bs.mat=MatType.Opaque;
+				bs.mesh=MeshType.Block;
+				return bs;
+			}
+		};
+	}
+
+}
