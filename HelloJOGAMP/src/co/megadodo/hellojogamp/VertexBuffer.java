@@ -48,7 +48,8 @@ public class VertexBuffer {
 	}
 	
 	public int vao;
-	public int vbo;
+	public int vboPos;
+	public int vboCol;
 	public int ebo;
 
 	public VertexBuffer() {
@@ -57,45 +58,50 @@ public class VertexBuffer {
 		polygonMode=PolygonMode.Fill;
 	}
 	
-	public float[]floatData;
+	public float[]posData;
+	public float[]colData;
 	public int[]triData;
 	
 	public ProvokingVertex provokingVertex;
 	public BufferType bufferType;
 	public PolygonMode polygonMode;
 
-	public void genBuffers(GL4 gl,float[]floatData,int[]triData) {
-		this.floatData=floatData;
+	public void genBuffers(GL4 gl,float[]posData,float[]colData,int[]triData) {
+		this.posData=posData;
+		this.colData=colData;
 		this.triData=triData;
 		IntBuffer intBuffer=IntBuffer.allocate(1);
 		
 		gl.glGenVertexArrays(1, intBuffer);
 		vao=intBuffer.get(0);
-		
+
 		gl.glGenBuffers(1, intBuffer);
-		vbo=intBuffer.get(0);
+		vboPos=intBuffer.get(0);
+
+		gl.glGenBuffers(1, intBuffer);
+		vboCol=intBuffer.get(0);
 		
 		gl.glGenBuffers(1, intBuffer);
 		ebo=intBuffer.get(0);
 		
 		gl.glBindVertexArray(vao);
 		
-		gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, vbo);
-		gl.glBufferData(GL4.GL_ARRAY_BUFFER, floatData.length*Float.BYTES, FloatBuffer.wrap(floatData), bufferType.glConst());
-		
-		int vertSize=6;
+		gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, vboPos);
+		gl.glBufferData(GL4.GL_ARRAY_BUFFER, posData.length*Float.BYTES, FloatBuffer.wrap(posData), bufferType.glConst());
 		gl.glEnableVertexAttribArray(0);
-		gl.glVertexAttribPointer(0, 3, GL4.GL_FLOAT, false, vertSize*Float.BYTES, 0);
-		
+		gl.glVertexAttribPointer(0, 3, GL4.GL_FLOAT, false, 3*Float.BYTES, 0);
+
+		gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, vboCol);
+		gl.glBufferData(GL4.GL_ARRAY_BUFFER, colData.length*Float.BYTES, FloatBuffer.wrap(colData), bufferType.glConst());
 		gl.glEnableVertexAttribArray(1);
-		gl.glVertexAttribPointer(1, 3, GL4.GL_FLOAT, false, vertSize*Float.BYTES, 3*Float.BYTES);
+		gl.glVertexAttribPointer(1, 3, GL4.GL_FLOAT, false, 3*Float.BYTES, 0);
 		
 		gl.glBindBuffer(GL4.GL_ELEMENT_ARRAY_BUFFER, ebo);
 		gl.glBufferData(GL4.GL_ELEMENT_ARRAY_BUFFER, triData.length*Integer.BYTES,IntBuffer.wrap(triData),bufferType.glConst());
 		
 		
 		gl.glBindVertexArray(0);
-        System.out.println("VAO gen, vao="+vao+", vbo="+vbo+", ebo="+ebo);
+        System.out.println("VAO gen, vao="+vao+", vboPos="+vboPos+", vboCol="+vboCol+", ebo="+ebo);
 	}
 
 	public void render(GL4 gl) {

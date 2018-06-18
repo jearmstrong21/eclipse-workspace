@@ -58,12 +58,15 @@ public class HelloJOGAMP implements GLEventListener, KeyListener {
 	
 	ShaderProgram shader;
 	VertexBuffer vb;
-	float[]floatData=new float[] {-1,-1,-1,0,0,0,   -1,-1,1,0,0,1,   -1,1,1,0,1,1, -1,1,-1,0,1,0,
-			1,-1,-1,1,0,0,   1,-1,1,1,0,1,   1,1,1,1,1,1,  1,1,-1,1,1,0,
-			-1,-1,-1,0,0,0, -1,-1,1,0,0,1, 1,-1,1,1,0,1, 1,-1,-1,1,0,0,
-			-1,1,-1,0,1,0, -1,1,1,0,1,1, 1,1,1,1,1,1, 1,1,-1,1,1,0,
-			-1,-1,-1,0,0,0,  -1,1,-1,0,1,0, 1,1,-1,1,1,0, 1,-1,-1,1,0,0,
-			-1,-1,1,0,0,1,  -1,1,1,0,1,1, 1,1,1,1,1,1, 1,-1,1,1,0,1
+	float[]posData=new float[] {
+			0,0,0,
+			1,0,0,
+			0,1,0
+	};
+	float[]colData=new float[] {
+			1,0,0,
+			0,1,0,
+			0,0,1
 	};
 	int[]triData=new int[] {0,1,2,0,2,3,
 			4,5,6,4,6,7,
@@ -101,7 +104,7 @@ public class HelloJOGAMP implements GLEventListener, KeyListener {
 		
 		vb=new VertexBuffer();
 		vb.polygonMode=PolygonMode.Fill;
-		vb.genBuffers(gl,floatData,triData);
+		vb.genBuffers(gl,posData,colData,triData);
 	}
 	
 	public void reshape(GLAutoDrawable drawable,int x,int y,int w,int h) {
