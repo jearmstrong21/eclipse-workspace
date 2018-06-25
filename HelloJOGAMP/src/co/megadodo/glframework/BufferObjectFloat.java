@@ -38,6 +38,7 @@ public class BufferObjectFloat extends BufferObject<Float> {
 		gl.glBufferData(bufferTarget.glConst(), data.length*Float.BYTES, FloatBuffer.wrap(data), bufferType.glConst());
 		gl.glEnableVertexAttribArray(vertattrib);
 		gl.glVertexAttribPointer(vertattrib, stride, GL4.GL_FLOAT, false, stride*Float.BYTES, 0);
+		System.out.println("Float buffer gen, bof="+bof);
 	}
 	
 	public void render(GL4 gl) {

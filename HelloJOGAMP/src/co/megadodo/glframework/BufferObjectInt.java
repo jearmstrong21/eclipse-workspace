@@ -33,6 +33,7 @@ public class BufferObjectInt extends BufferObject<Integer> {
 		gl.glBufferData(bufferTarget.glConst(), data.length*Integer.BYTES, IntBuffer.wrap(data), bufferType.glConst());
 //		gl.glEnableVertexAttribArray(vertattrib);
 //		gl.glVertexAttribPointer(vertattrib, stride, GL4.GL_FLOAT, false, stride*Float.BYTES, 0);
+		System.out.println("Int buffer gen, boi="+boi);
 	}
 	
 	public void render(GL4 gl) {

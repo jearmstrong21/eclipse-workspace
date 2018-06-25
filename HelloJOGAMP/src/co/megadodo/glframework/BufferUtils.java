@@ -27,5 +27,11 @@ public class BufferUtils {
 		for(int i=0;i<list.size();i++)arr[i]=list.get(i);
 		return arr;
 	}
+	
+	public static float[] listToFloatArr(ArrayList<Float>list) {
+		float[]arr=new float[list.size()];
+		for(int i=0;i<list.size();i++)arr[i]=list.get(i);
+		return arr;
+	}
 
 }

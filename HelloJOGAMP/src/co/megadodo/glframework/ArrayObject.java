@@ -26,6 +26,10 @@ public class ArrayObject {
 	public ProvokingVertex provokingVertex;
 	public BufferType bufferType;
 	public PolygonMode polygonMode;
+	
+	public void addBuffer(BufferObject buffer) {
+		buffers.add(buffer);
+	}
 
 	public void genBuffers(GL4 gl) {
 		IntBuffer intBuffer=IntBuffer.allocate(1);

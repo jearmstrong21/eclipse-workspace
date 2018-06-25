@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-9">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-glfw-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-glfw.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-glfw-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-glfw-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-openal-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-openal.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-openal-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-openal-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-opengl-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-opengl.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-opengl-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-opengl-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-stb-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-stb.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-stb-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/sources/lwjgl-stb-sources.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

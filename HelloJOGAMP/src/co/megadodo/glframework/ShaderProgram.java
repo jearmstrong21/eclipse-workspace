@@ -73,11 +73,14 @@ public class ShaderProgram {
 	public void bindProgram(GL4 gl) {
 		gl.glUseProgram(program);
 	}
-	public void delProgram(GL4 gl) {
+	public void delete(GL4 gl) {
 		gl.glDeleteProgram(program);
 	}
 	public void uniformMat4(GL4 gl,String param,Mat4 mat) {
 		gl.glUniformMatrix4fv(gl.glGetUniformLocation(program, param), 1, false, mat.toDfb_());
+	}
+	public void uniformTex(GL4 gl,String param,Texture tex) {
+		gl.glUniform1i(gl.glGetUniformLocation(program, param), tex.id);
 	}
 
 }
