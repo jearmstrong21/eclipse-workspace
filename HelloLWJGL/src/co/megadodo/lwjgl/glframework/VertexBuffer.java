@@ -32,50 +32,68 @@ import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class ShaderProgram implements GLResource  {
+public class VertexBuffer implements GLResource {
 	
-	public static int compileShader(int type, String strType,String source) {
-		int id=glCreateShader(type);
-		glShaderSource(id,source);
-		glCompileShader(id);
-		if(glGetShaderi(id, GL_COMPILE_STATUS)==GL_FALSE) {
-			System.out.println("Shader compile error for type "+strType+":\n"+glGetShaderInfoLog(id));
-		}
-		return id;
-	}
-	
-	public static int compileShaderFiles(int type, String strType, String filename) {
-		return compileShader(type,strType,Utilities.loadStrFromFile(filename));
-	}
 
 	public int id;
 	
-	public ShaderProgram() {
-		
-	}
+	public int target;
+	
+	public int usage;
 	
 	public void gen() {
-		id=glCreateProgram();
+		id=glGenBuffers();
 	}
 	
-	public void attach(int shader) {
-		glAttachShader(id, shader);
+	public int num_data;
+	
+	public void setData(float[] data) {
+		num_data=data.length;
+		FloatBuffer buf=BufferUtils.createFloatBuffer(data.length);
+		buf.put(data);
+		buf.flip();
+		glBufferData(target,buf,usage);
 	}
 	
-	public void link() {
-		glLinkProgram(id);
+	public void setData(byte[]data) {
+		num_data=data.length;
+		ByteBuffer buf=BufferUtils.createByteBuffer(data.length);
+		buf.put(data);
+		buf.flip();
+		glBufferData(target,buf,usage);
+	}
+	
+	public void setData(int[]data) {
+		num_data=data.length;
+		IntBuffer buf=BufferUtils.createIntBuffer(data.length);
+		buf.put(data);
+		buf.flip();
+		glBufferData(target,buf,usage);
+	}
+	
+	public void addVertexAttrib(int attribNum, int size, int attribType, boolean normalized, int stride, int start) {
+
+		int bytes=AttribType.getBytes(attribType);
+		glEnableVertexAttribArray(attribNum);
+		glVertexAttribPointer(attribNum, size, attribType, normalized, stride * bytes, start*bytes);
+	}
+	
+	public void render() {
+		if(target==BufferTarget.ElementArray) {
+			glDrawElements(GL_TRIANGLES, num_data, GL_BYTE, 0);
+		}
 	}
 	
 	public void bind() {
-		glUseProgram(id);
+		glBindBuffer(target,id);
 	}
 	
 	public void unbind() {
-		glUseProgram(0);
+		glBindBuffer(target,0);
 	}
 	
 	public void delete() {
-		glDeleteProgram(id);
+		glDeleteBuffers(id);
 	}
 	
 }

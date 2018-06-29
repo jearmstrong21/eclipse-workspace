@@ -66,25 +66,43 @@ public class TestFramework {
 		shader.attach(ShaderProgram.compileShaderFiles(GL_FRAGMENT_SHADER, "fragment", "Shaders/shader.frag"));
 		shader.link();
 
-		float[] vboData = new float[] { 0, 0, 0, 1, 0, 0, 0, 1, 0 };
-
+		float[] vboPosData = new float[] { 0, 0, 0, 1, 0, 0, 0, 1, 0 };
+		float[] vboColData = new float[] { 1,0,0,0,1,0,0,0,1,0};
+		byte[]triData=new byte[] {0,1,2};
+		
 		VertexArray vao=new VertexArray();
-		int vbo = glGenBuffers();
+		VertexBuffer vboPos=new VertexBuffer();
+		vboPos.target=BufferTarget.Array;
+		vboPos.usage=BufferUsage.StaticDraw;
+		VertexBuffer vboCol=new VertexBuffer();
+		vboCol.target=BufferTarget.Array;
+		vboCol.usage=BufferUsage.StaticDraw;
+		
+		int ebo=glGenBuffers();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
+		ByteBuffer buf=BufferUtils.createByteBuffer(3);
+		buf.put(new byte[] {0,1,2});
+		buf.flip();
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,ebo,GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
 		vao.gen();
 		vao.bind();
 
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		vboPos.gen();
+		vboPos.bind();
+		vboPos.setData(vboPosData);
+		vboPos.addVertexAttrib(0, 3, AttribType.Float, false, 3, 0);
+		vboPos.unbind();
+		
+		vboCol.gen();
+		vboCol.bind();
+		vboCol.setData(vboColData);
+		vboCol.addVertexAttrib(1, 3, AttribType.Float, false, 3, 0);
+		vboCol.unbind();
 
-		FloatBuffer buf = BufferUtils.createFloatBuffer(vboData.length);
-		buf.put(vboData).flip();
-
-		glBufferData(GL_ARRAY_BUFFER, buf, GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * Float.BYTES, 0);
-
+		
 		vao.unbind();
-
 
 		while (!glfwWindowShouldClose(window)) {
 			glClearColor(1, 1, 1, 1);
@@ -93,9 +111,18 @@ public class TestFramework {
 			shader.bind();
 
 			vao.bind();
-			// glDrawElements(GL_TRIANGLES, indices);
-			glDrawArrays(GL_TRIANGLES, 0, 3);
-			
+			glEnableVertexAttribArray(0);
+			glEnableVertexAttribArray(1);
+
+//			glDrawArrays(GL_TRIANGLES, 0, 3);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
+			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,0);
+//			eboBuf.bind();
+//			eboBuf.render();
+//			eboBuf.unbind();
+
+//			glDisableVertexAttribArray(0);
+//			glDisableVertexAttribArray(1);
 			vao.unbind();
 
 			shader.unbind();
@@ -104,6 +131,12 @@ public class TestFramework {
 			glfwPollEvents();
 		}
 		shader.delete();
+		
+		vao.delete();
+		
+		vboPos.delete();
+		vboCol.delete();
+//		eboBuf.delete();
 
 		glfwDestroyWindow(window);
 		glfwTerminate();

@@ -32,27 +32,21 @@ import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class VertexArray implements GLResource  {
+public class BufferTarget {
+
+
+	public static int Array=GL_ARRAY_BUFFER;
+	public static int AtomicCounter=GL_ATOMIC_COUNTER_BUFFER;
+	public static int CopyRead=GL_COPY_READ_BUFFER;
+	public static int CopyWrite=GL_COPY_WRITE_BUFFER;
+	public static int DispatchIndirect=GL_DISPATCH_INDIRECT_BUFFER;
+	public static int DrawIndirect=GL_DRAW_INDIRECT_BUFFER;
+	public static int ElementArray=GL_ELEMENT_ARRAY_BUFFER;
+	public static int PixelPack=GL_PIXEL_PACK_BUFFER;
+	public static int PixelUnpack=GL_PIXEL_UNPACK_BUFFER;
+	public static int Query=GL_QUERY_BUFFER;
+	public static int ShaderStorage=GL_SHADER_STORAGE_BUFFER;
+	public static int Texture=GL_TEXTURE_BUFFER;
+	public static int Uniform=GL_UNIFORM_BUFFER;
 	
-	public VertexArray() {
-		
-	}
-	
-	public int id;
-	
-	public void gen() {
-		id=glGenVertexArrays();
-	}
-	
-	public void bind() {
-		glBindVertexArray(id);
-	}
-	
-	public void unbind() {
-		glBindVertexArray(0);
-	}
-	
-	public void delete() {
-		glDeleteVertexArrays(id);
-	}
 }

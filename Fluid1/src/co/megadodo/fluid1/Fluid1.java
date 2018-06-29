@@ -78,17 +78,18 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 	final Vec2 G = new Vec2(0.f, 12000 * 9.8f); // external (gravitational) forces
 	final float REST_DENS = 1000.f; // rest density
 	final float GAS_CONST = 2000.f; // const for equation of state
-	final float H = 8.f; // kernel radius
+	final float H = 20.f; // kernel radius
+	final float DISPLAY_SIZE=H;
 	final float HSQ = H * H; // radius^2 for optimization
 	final float MASS = 65.f; // assume all particles have the same mass
 	final float VISC = 1500.f; // viscosity constant
-	final float DT = 0.00008f; // integration timestep
+	final float DT = 0.0002f; // integration timestep
 
 	// smoothing kernels defined in Müller and their gradients
 	final float POLY6 = 315.0f / (65.f * (float) Math.PI * (float) Math.pow(H, 9.f));
 	final float SPIKY_GRAD = -45.f / ((float) Math.PI * (float) Math.pow(H, 6.f));
 	final float VISC_LAP = 45.f / ((float) Math.PI * (float) Math.pow(H, 6.f));
-
+	
 	// simulation parameters
 	final float EPS = 50; // boundary epsilon
 	final float BOUND_DAMPING = -0.5f;
@@ -97,6 +98,10 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 
 	public void initSim() {
 		particles = new ArrayList<Particle>();
+		System.out.println(POLY6);
+		System.out.println(SPIKY_GRAD);
+		System.out.println(VISC_LAP);
+//		System.out.printf
 //		for (int i = 0; i < 300; i++) {
 //			Particle p = new Particle();
 //			p.x = new Vec2(rand(0, 500), rand(0, 500));
@@ -151,7 +156,10 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 				if (r < H) {
 					fpress = fpress.sub(rij.normalize()
 							.mult(MASS * (pi.p + pj.p) / (2.f * pj.rho) * SPIKY_GRAD * (float) Math.pow(H - r, 2.f)));
-					fvisc = fpress.add((pj.v.sub(pi.v)).mult(VISC * MASS / pj.rho * VISC_LAP * (H - r)));
+					fvisc = fvisc.add((pj.v.sub(pi.v)).mult(VISC * MASS / pj.rho * VISC_LAP * (H - r)));
+					if(pj.rho==0) {
+						System.out.printf("fpress=%f,%f, fvisc=%f,%f, NaN/NaN=%f, NaN/0=%f, 0/NaN=%f, NaN/1=%f, 1/NAN=%f\n",fpress.x,fpress.y,fvisc.x,fvisc.y,(Float.NaN/Float.NaN),(Float.NaN)/0.0f,0.0f/Float.NaN,Float.NaN/1.0f,1.0f/Float.NaN);
+					}
 				}
 			}
 	        Vec2 fgrav = G.mult(pi.rho);
@@ -184,10 +192,13 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 	int frames=0;
 	public void displaySim(Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
-		int r=8;
+		int r=(int)DISPLAY_SIZE;
 		g2d.fillRect(0, 0, frame.getWidth(), frame.getHeight());
 		for (Particle p : particles) {
-			float ang=(float)Math.atan2(p.v.y, p.v.x);
+//			float ang=(float)Math.atan2(p.v.y, p.v.x);
+//			float ang=(p.rho*7500f)%360;
+//			float ang=(p.p*10)%360;
+			float ang=p.p;
 //			h=255*(float)((Math.atan2(p.v.y, p.v.x)+Math.PI)/Math.PI/2.0f);
 			g2d.setColor(Color.getHSBColor((ang+pi)/pi/2,1,1));
 //			g2d.setColor(Color.WHITE);
@@ -225,6 +236,10 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 		for(Particle p:particles) {
 			p.x.x=rand(0,100);
 			p.x.y=rand(frame.getHeight()-300,frame.getHeight()-50);
+			p.v=new Vec2(0,0);
+			p.f=new Vec2(0,0);
+			p.rho=0;
+			p.p=0;
 		}
 	}
 

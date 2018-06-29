@@ -32,27 +32,18 @@ import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class VertexArray implements GLResource  {
+public class BufferUsage {
 	
-	public VertexArray() {
-		
-	}
+	public static int StreamDraw=GL_STREAM_DRAW;
+	public static int StreamRead=GL_STREAM_READ;
+	public static int StreamCopy=GL_STREAM_COPY;
 	
-	public int id;
+	public static int StaticDraw=GL_STATIC_DRAW;
+	public static int StaticRead=GL_STATIC_READ;
+	public static int StaticCopy=GL_STATIC_COPY;
 	
-	public void gen() {
-		id=glGenVertexArrays();
-	}
-	
-	public void bind() {
-		glBindVertexArray(id);
-	}
-	
-	public void unbind() {
-		glBindVertexArray(0);
-	}
-	
-	public void delete() {
-		glDeleteVertexArrays(id);
-	}
+	public static int DynamicDraw=GL_DYNAMIC_DRAW;
+	public static int DynamicRead=GL_DYNAMIC_READ;
+	public static int DynamicCopy=GL_DYNAMIC_COPY;
+
 }

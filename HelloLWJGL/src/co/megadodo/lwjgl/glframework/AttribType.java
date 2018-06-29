@@ -32,27 +32,17 @@ import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class VertexArray implements GLResource  {
+public class AttribType {
 	
-	public VertexArray() {
-		
+	public static int Float=GL_FLOAT;
+	public static int Integer=GL_INT;
+	public static int Byte=GL_BYTE;
+	
+	public static int getBytes(int type) {
+		if(type==AttribType.Float)return java.lang.Float.BYTES;
+		if(type==AttribType.Integer)return java.lang.Integer.BYTES;
+		if(type==AttribType.Byte)return java.lang.Byte.BYTES;
+		return 0;
 	}
-	
-	public int id;
-	
-	public void gen() {
-		id=glGenVertexArrays();
-	}
-	
-	public void bind() {
-		glBindVertexArray(id);
-	}
-	
-	public void unbind() {
-		glBindVertexArray(0);
-	}
-	
-	public void delete() {
-		glDeleteVertexArrays(id);
-	}
+
 }
