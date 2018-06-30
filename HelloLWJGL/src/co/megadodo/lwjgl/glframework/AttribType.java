@@ -37,6 +37,8 @@ public class AttribType {
 	public static int Float=GL_FLOAT;
 	public static int Integer=GL_INT;
 	public static int Byte=GL_BYTE;
+	public static int UnsignedByte=GL_UNSIGNED_BYTE;
+	public static int UnsignedInteger=GL_UNSIGNED_INT;
 	
 	public static int getBytes(int type) {
 		if(type==AttribType.Float)return java.lang.Float.BYTES;

@@ -32,7 +32,7 @@ import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class VertexBuffer implements GLResource {
+public class VertexBuffer implements GLResource, GLRenderable {
 	
 
 	public int id;
@@ -47,8 +47,11 @@ public class VertexBuffer implements GLResource {
 	
 	public int num_data;
 	
+	public int data_type;
+	
 	public void setData(float[] data) {
 		num_data=data.length;
+		data_type=AttribType.Float;
 		FloatBuffer buf=BufferUtils.createFloatBuffer(data.length);
 		buf.put(data);
 		buf.flip();
@@ -57,6 +60,7 @@ public class VertexBuffer implements GLResource {
 	
 	public void setData(byte[]data) {
 		num_data=data.length;
+		data_type=AttribType.Byte;
 		ByteBuffer buf=BufferUtils.createByteBuffer(data.length);
 		buf.put(data);
 		buf.flip();
@@ -65,6 +69,25 @@ public class VertexBuffer implements GLResource {
 	
 	public void setData(int[]data) {
 		num_data=data.length;
+		data_type=AttribType.Integer;
+		IntBuffer buf=BufferUtils.createIntBuffer(data.length);
+		buf.put(data);
+		buf.flip();
+		glBufferData(target,buf,usage);
+	}
+	
+	public void setDataUnsigned(byte[]data) {
+		num_data=data.length;
+		data_type=AttribType.UnsignedByte;
+		ByteBuffer buf=BufferUtils.createByteBuffer(data.length);
+		buf.put(data);
+		buf.flip();
+		glBufferData(target,buf,usage);
+	}
+	
+	public void setDataUnsigned(int[]data) {
+		num_data=data.length;
+		data_type=AttribType.UnsignedInteger;
 		IntBuffer buf=BufferUtils.createIntBuffer(data.length);
 		buf.put(data);
 		buf.flip();
@@ -80,7 +103,7 @@ public class VertexBuffer implements GLResource {
 	
 	public void render() {
 		if(target==BufferTarget.ElementArray) {
-			glDrawElements(GL_TRIANGLES, num_data, GL_BYTE, 0);
+			glDrawElements(GL_TRIANGLES, num_data, data_type, 0);
 		}
 	}
 	

@@ -5,6 +5,10 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import com.hackoeur.jglm.Mat4;
+import com.hackoeur.jglm.Matrices;
+import com.hackoeur.jglm.Vec3;
+
 import java.io.File;
 import java.nio.*;
 import java.util.Scanner;
@@ -77,14 +81,9 @@ public class TestFramework {
 		VertexBuffer vboCol=new VertexBuffer();
 		vboCol.target=BufferTarget.Array;
 		vboCol.usage=BufferUsage.StaticDraw;
-		
-		int ebo=glGenBuffers();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
-		ByteBuffer buf=BufferUtils.createByteBuffer(3);
-		buf.put(new byte[] {0,1,2});
-		buf.flip();
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER,ebo,GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+		VertexBuffer eboBuf=new VertexBuffer();
+		eboBuf.target=BufferTarget.ElementArray;
+		eboBuf.usage=BufferUsage.StaticDraw;
 
 		vao.gen();
 		vao.bind();
@@ -101,28 +100,33 @@ public class TestFramework {
 		vboCol.addVertexAttrib(1, 3, AttribType.Float, false, 3, 0);
 		vboCol.unbind();
 
+		eboBuf.gen();
+		eboBuf.bind();
+		eboBuf.setDataUnsigned(triData);
+		eboBuf.unbind();
 		
 		vao.unbind();
+		System.out.printf("vao=%d, vboPos=%d, vboCol=%d, ebo=%d, shader=%d\n",vao.id,vboPos.id,vboCol.id,eboBuf.id,shader.id);
 
 		while (!glfwWindowShouldClose(window)) {
 			glClearColor(1, 1, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			shader.bind();
+			
+			Mat4 model=Mat4.MAT4_IDENTITY;
+			Mat4 view=Matrices.translate(new Vec3(0,0.2f,0));
+			Mat4 projection=Mat4.MAT4_IDENTITY;
+			shader.setMat4("model", model);
+			shader.setMat4("view", view);
+			shader.setMat4("projection", projection);
 
 			vao.bind();
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
+			
+			eboBuf.bind();
+			eboBuf.render();
+			eboBuf.unbind();
 
-//			glDrawArrays(GL_TRIANGLES, 0, 3);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,0);
-//			eboBuf.bind();
-//			eboBuf.render();
-//			eboBuf.unbind();
-
-//			glDisableVertexAttribArray(0);
-//			glDisableVertexAttribArray(1);
 			vao.unbind();
 
 			shader.unbind();

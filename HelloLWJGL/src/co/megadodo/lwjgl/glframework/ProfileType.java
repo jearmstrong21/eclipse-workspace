@@ -32,35 +32,10 @@ import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class VertexArray implements GLResource  {
+public class ProfileType {
+
+	public static int Core=GLFW_OPENGL_CORE_PROFILE;
+	public static int Compat=GLFW_OPENGL_COMPAT_PROFILE;
+	public static int Any=GLFW_OPENGL_ANY_PROFILE;
 	
-	public VertexArray() {
-		
-	}
-	
-	public int id;
-	
-	public void gen() {
-		id=glGenVertexArrays();
-	}
-	
-	public void bind() {
-		glBindVertexArray(id);
-	}
-	
-	public void renderArrays(int num_verts) {
-		renderArrays(0,num_verts);
-	}
-	
-	public void renderArrays(int start, int num_verts) {
-		glDrawArrays(GL_TRIANGLES,start,num_verts);
-	}
-	
-	public void unbind() {
-		glBindVertexArray(0);
-	}
-	
-	public void delete() {
-		glDeleteVertexArrays(id);
-	}
 }

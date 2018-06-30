@@ -5,6 +5,8 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import com.hackoeur.jglm.Mat4;
+
 import java.io.File;
 import java.nio.*;
 import java.util.Scanner;
@@ -72,6 +74,17 @@ public class ShaderProgram implements GLResource  {
 	
 	public void unbind() {
 		glUseProgram(0);
+	}
+	
+	public void setMat4(String paramName,Mat4 m) {
+		int loc=glGetUniformLocation(id,paramName);
+		FloatBuffer buf=BufferUtils.createFloatBuffer(16);
+		buf.put(new float[] {m.m00,m.m01,m.m02,m.m03
+							,m.m10,m.m11,m.m12,m.m13
+							,m.m20,m.m21,m.m22,m.m23
+							,m.m30,m.m31,m.m32,m.m33});
+		buf.flip();
+		glUniformMatrix4fv(loc,true,buf);
 	}
 	
 	public void delete() {
