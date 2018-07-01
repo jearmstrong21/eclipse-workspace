@@ -96,7 +96,42 @@ public class GLWindow implements GLResource {
 		id=glfwCreateWindow(width, height, title, 0, 0);
 		glfwMakeContextCurrent(id);
 		glfwSwapInterval(1);
+		glfwSetKeyCallback(id, new GLFWKeyCallback() {
+			
+			@Override
+			public void invoke(long window, int key, int scancode, int action, int mods) {
+				
+			}
+		});
+		glfwSetMouseButtonCallback(id, new GLFWMouseButtonCallback() {
+			
+			@Override
+			public void invoke(long window, int button, int action, int mods) {
+				
+			}
+		});
+		glfwSetCharCallback(id, new GLFWCharCallback() {
+			
+			@Override
+			public void invoke(long window, int codepoint) {
+				
+			}
+		});
 		GL.createCapabilities();
+	}
+	
+	public float getMouseX() {
+		double[]xpos=new double[1];
+		double[]ypos=new double[1];
+		glfwGetCursorPos(id, xpos, ypos);
+		return (float)xpos[0];
+	}
+	
+	public float getMouseY() {
+		double[]xpos=new double[1];
+		double[]ypos=new double[1];
+		glfwGetCursorPos(id, xpos, ypos);
+		return (float)ypos[0];
 	}
 	
 	public void bind() {

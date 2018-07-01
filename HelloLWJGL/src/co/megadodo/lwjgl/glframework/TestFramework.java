@@ -59,6 +59,7 @@ public class TestFramework {
 
 		float[] vboPosData = new float[] { -1,-1,0,  -1,1,0,   1,1,0,   1,-1,0};
 		float[] vboUVData=new float[] {    0,0,      0,1,      1,1,     1,0};
+		float[] vboColData=new float[] {   1,0.75f,0.75f,    0.75f,1,0.75f,    0.75f,0.75f,1,   1,1,1};
 		
 		byte[]triData=new byte[] {0,1,2,0,2,3};
 			
@@ -69,6 +70,9 @@ public class TestFramework {
 		VertexBuffer vboUV=new VertexBuffer();
 		vboUV.target=BufferTarget.Array;
 		vboUV.usage=BufferUsage.StaticDraw;
+		VertexBuffer vboCol=new VertexBuffer();
+		vboCol.target=BufferTarget.Array;
+		vboCol.usage=BufferUsage.StaticDraw;
 		VertexBuffer eboBuf=new VertexBuffer();
 		eboBuf.target=BufferTarget.ElementArray;
 		eboBuf.usage=BufferUsage.StaticDraw;
@@ -86,6 +90,13 @@ public class TestFramework {
 		vboUV.bind();
 		vboUV.setData(vboUVData);
 		vboUV.addVertexAttrib(1, 2, AttribType.Float, false, 2, 0);
+		vboUV.unbind();
+		
+		vboCol.gen();
+		vboCol.bind();
+		vboCol.setData(vboColData);
+		vboCol.addVertexAttrib(2, 3, AttribType.Float, false, 3, 0);
+		vboCol.unbind();
 
 		eboBuf.gen();
 		eboBuf.bind();
@@ -94,19 +105,19 @@ public class TestFramework {
 		
 		vao.unbind();
 		
-		Texture tex=Texture.loadTexture("Images/Zoe1.png");
+		Texture tex1=Texture.loadTexture("Images/Zoe1.png");
+		Texture tex2=Texture.loadTexture("Images/smiley.png");
 
 		while (window.isOpen()) {
 			window.bind();
 			glClearColor(1, 1, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			Texture.activateUnit(0);
-			tex.bind();
+			
 			
 			shader.bind();
 			
-			
+			tex1.bindToUnit(0);
+			tex2.bindToUnit(1);
 			
 			
 			Mat4 model=Mat4.MAT4_IDENTITY;
@@ -115,7 +126,10 @@ public class TestFramework {
 			shader.setMat4("model", model);
 			shader.setMat4("view", view);
 			shader.setMat4("projection", projection);
-			shader.setInt("theTexture", 0);
+			shader.setInt("tex1", 0);
+			shader.setInt("tex2", 1);
+			shader.setFloat("blendTex", Mathf.cos(GLUtilities.getTime())*0.5f+0.5f);
+			shader.setFloat("blendCol", Mathf.cos(GLUtilities.getTime()*5+10)*0.5f+0.5f);
 
 			vao.bind();
 			
@@ -135,9 +149,11 @@ public class TestFramework {
 		
 		vboPos.delete();
 		vboUV .delete();
+		vboCol.delete();
 		eboBuf.delete();
-		
-		tex.delete();
+
+		tex1.delete();
+		tex2.delete();
 
 		window.delete();
 		

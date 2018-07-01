@@ -33,6 +33,10 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class GLUtilities {
+	
+	public static float getTime() {
+		return (float)glfwGetTime();
+	}
 
 	public static void printGLInfo() {
 		String version = glGetString(GL_VERSION);
