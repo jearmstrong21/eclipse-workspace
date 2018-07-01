@@ -129,7 +129,7 @@ public class TestFramework {
 			shader.setInt("tex1", 0);
 			shader.setInt("tex2", 1);
 			shader.setFloat("blendTex", Mathf.cos(GLUtilities.getTime())*0.5f+0.5f);
-			shader.setFloat("blendCol", Mathf.cos(GLUtilities.getTime()*5+10)*0.5f+0.5f);
+			shader.setFloat("blendCol", Mathf.cos(GLUtilities.getTime()*5+10)*0.25f+0.75f);
 
 			vao.bind();
 			
