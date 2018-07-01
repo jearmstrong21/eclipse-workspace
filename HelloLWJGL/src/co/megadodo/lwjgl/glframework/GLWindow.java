@@ -32,11 +32,12 @@ import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class GLWindow {
+public class GLWindow implements GLResource {
 	
 	public long id;
 	
 	public static boolean glfwInitialized=false;
+	public static boolean glfwTerminated=false;
 	
 	public static void initGLFW() {
 		if(!glfwInitialized) {
@@ -45,25 +46,39 @@ public class GLWindow {
 		}
 	}
 	
+	public static void endGLFW() {
+		if(!glfwTerminated) {
+			glfwTerminate();
+			glfwTerminated=true;
+		}
+	}
+	
 	public GLWindow() {
 		initGLFW();
 	}
 	
-	private boolean defaultHints=false;
 	
 	private int width;
 	private int height;
 	private String title;
+	
+	static {
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				glfwTerminate();
+				System.out.println("Terminating GLFW");
+			}
+		}));
+	}
 	
 	public void hints() {
 		hints(4,1,true,ProfileType.Core);
 	}
 	
 	public void hints(int major,int minor,boolean forwardCompat,int profile) {
-		if(!defaultHints) {
-			glfwDefaultWindowHints();
-			defaultHints=true;
-		}
+		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, forwardCompat?GLFW_TRUE:GLFW_FALSE);
@@ -71,13 +86,26 @@ public class GLWindow {
 	}
 	
 	public void gen() {
-		width=0;
-		height=0;
-		title="Default title";
-		if(!defaultHints) {
-			hints();
+		if(!glfwInitialized){
+			glfwInit();
+			glfwInitialized=true;
 		}
+		width=100;
+		height=100;
+		title="Default title";
 		id=glfwCreateWindow(width, height, title, 0, 0);
+		glfwMakeContextCurrent(id);
+		glfwSwapInterval(1);
+		GL.createCapabilities();
+	}
+	
+	public void bind() {
+		createGL();
+	}
+	
+	public void createGL() {
+		glfwMakeContextCurrent(id);
+		GL.createCapabilities();
 	}
 	
 	public void setSize(int w,int h) {
@@ -105,6 +133,31 @@ public class GLWindow {
 	
 	public boolean isOpen() {
 		return !glfwWindowShouldClose(id);
+	}
+	
+	public void unbind() {
+		endLoop();
+	}
+	
+	public void endLoop() {
+		glfwSwapBuffers(id);
+		glfwPollEvents();
+	}
+	
+	public void destroy() {
+		delete();
+	}
+	
+	public void delete() {
+		glfwDestroyWindow(id);
+	}
+	
+	public void hide() {
+		glfwHideWindow(id);
+	}
+	
+	public void show() {
+		glfwShowWindow(id);
 	}
 
 }

@@ -40,29 +40,16 @@ public class TestFramework {
 
 	public static void main(String[] args) {
 
-		if (!glfwInit()) {
-			System.out.println("GLFW not init.");
-			return;
-		}
+		GLWindow.initGLFW();
+		GLWindow window=new GLWindow();
+		window.hints();
+		window.gen();
+		window.setSize(500,500);
+		window.setTitle("Test Framework");
+		window.show();
+		window.bind();
 
-		glfwDefaultWindowHints();
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		long window = glfwCreateWindow(500, 500, "Window", NULL, NULL);
-		if (window == NULL) {
-			System.out.println("Window not create.");
-			return;
-		}
-
-		glfwMakeContextCurrent(window);
-		glfwSwapInterval(1);
-		glfwShowWindow(window);
-
-		GL.createCapabilities();
-
-		Utilities.printGLInfo();
+		GLUtilities.printGLInfo();
 
 		ShaderProgram shader = new ShaderProgram();
 		shader.gen();
@@ -70,17 +57,18 @@ public class TestFramework {
 		shader.attach(ShaderProgram.compileShaderFiles(GL_FRAGMENT_SHADER, "fragment", "Shaders/shader.frag"));
 		shader.link();
 
-		float[] vboPosData = new float[] { 0, 0, 0, 1, 0, 0, 0, 1, 0 };
-		float[] vboColData = new float[] { 1,0,0,0,1,0,0,0,1,0};
-		byte[]triData=new byte[] {0,1,2};
+		float[] vboPosData = new float[] { -1,-1,0,  -1,1,0,   1,1,0,   1,-1,0};
+		float[] vboUVData=new float[] {    0,0,      0,1,      1,1,     1,0};
 		
+		byte[]triData=new byte[] {0,1,2,0,2,3};
+			
 		VertexArray vao=new VertexArray();
 		VertexBuffer vboPos=new VertexBuffer();
 		vboPos.target=BufferTarget.Array;
 		vboPos.usage=BufferUsage.StaticDraw;
-		VertexBuffer vboCol=new VertexBuffer();
-		vboCol.target=BufferTarget.Array;
-		vboCol.usage=BufferUsage.StaticDraw;
+		VertexBuffer vboUV=new VertexBuffer();
+		vboUV.target=BufferTarget.Array;
+		vboUV.usage=BufferUsage.StaticDraw;
 		VertexBuffer eboBuf=new VertexBuffer();
 		eboBuf.target=BufferTarget.ElementArray;
 		eboBuf.usage=BufferUsage.StaticDraw;
@@ -94,11 +82,10 @@ public class TestFramework {
 		vboPos.addVertexAttrib(0, 3, AttribType.Float, false, 3, 0);
 		vboPos.unbind();
 		
-		vboCol.gen();
-		vboCol.bind();
-		vboCol.setData(vboColData);
-		vboCol.addVertexAttrib(1, 3, AttribType.Float, false, 3, 0);
-		vboCol.unbind();
+		vboUV.gen();
+		vboUV.bind();
+		vboUV.setData(vboUVData);
+		vboUV.addVertexAttrib(1, 2, AttribType.Float, false, 2, 0);
 
 		eboBuf.gen();
 		eboBuf.bind();
@@ -106,20 +93,29 @@ public class TestFramework {
 		eboBuf.unbind();
 		
 		vao.unbind();
-		System.out.printf("vao=%d, vboPos=%d, vboCol=%d, ebo=%d, shader=%d\n",vao.id,vboPos.id,vboCol.id,eboBuf.id,shader.id);
+		
+		Texture tex=Texture.loadTexture("Images/Zoe1.png");
 
-		while (!glfwWindowShouldClose(window)) {
+		while (window.isOpen()) {
+			window.bind();
 			glClearColor(1, 1, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			Texture.activateUnit(0);
+			tex.bind();
+			
 			shader.bind();
 			
+			
+			
+			
 			Mat4 model=Mat4.MAT4_IDENTITY;
-			Mat4 view=Matrices.translate(new Vec3(0,0.2f,0));
+			Mat4 view=Mat4.MAT4_IDENTITY;
 			Mat4 projection=Mat4.MAT4_IDENTITY;
 			shader.setMat4("model", model);
 			shader.setMat4("view", view);
 			shader.setMat4("projection", projection);
+			shader.setInt("theTexture", 0);
 
 			vao.bind();
 			
@@ -131,19 +127,21 @@ public class TestFramework {
 
 			shader.unbind();
 
-			glfwSwapBuffers(window);
-			glfwPollEvents();
+			window.unbind();
 		}
 		shader.delete();
 		
 		vao.delete();
 		
 		vboPos.delete();
-		vboCol.delete();
-//		eboBuf.delete();
+		vboUV .delete();
+		eboBuf.delete();
+		
+		tex.delete();
 
-		glfwDestroyWindow(window);
-		glfwTerminate();
+		window.delete();
+		
+		GLWindow.endGLFW();
 
 	}
 

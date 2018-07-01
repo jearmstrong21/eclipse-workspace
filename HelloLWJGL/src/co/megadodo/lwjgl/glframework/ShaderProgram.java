@@ -76,6 +76,14 @@ public class ShaderProgram implements GLResource  {
 		glUseProgram(0);
 	}
 	
+	public void setInt(String paramName,int i) {
+		glUniform1i(glGetUniformLocation(id,paramName),i);
+	}
+	
+	public void setTexture(String paramName,Texture t) {
+		setInt(paramName,t.id);
+	}
+	
 	public void setMat4(String paramName,Mat4 m) {
 		int loc=glGetUniformLocation(id,paramName);
 		FloatBuffer buf=BufferUtils.createFloatBuffer(16);
