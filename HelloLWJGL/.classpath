@@ -36,5 +36,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="joml-jdk8-1.9.9.jar" sourcepath="joml-1.9.9-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

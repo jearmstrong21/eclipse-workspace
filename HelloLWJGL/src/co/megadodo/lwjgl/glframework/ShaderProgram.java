@@ -1,11 +1,10 @@
 package co.megadodo.lwjgl.glframework;
 
+import org.joml.Matrix4f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
-
-import com.hackoeur.jglm.Mat4;
 
 import java.io.File;
 import java.nio.*;
@@ -92,15 +91,12 @@ public class ShaderProgram implements GLResource  {
 		glUniform1f(glGetUniformLocation(id,paramName),f);
 	}
 	
-	public void setMat4(String paramName,Mat4 m) {
+	public void setMat4(String paramName,Matrix4f m) {
 		int loc=glGetUniformLocation(id,paramName);
 		FloatBuffer buf=BufferUtils.createFloatBuffer(16);
-		buf.put(new float[] {m.m00,m.m01,m.m02,m.m03
-							,m.m10,m.m11,m.m12,m.m13
-							,m.m20,m.m21,m.m22,m.m23
-							,m.m30,m.m31,m.m32,m.m33});
+		buf.put(m.get(new float[16]));
 		buf.flip();
-		glUniformMatrix4fv(loc,true,buf);
+		glUniformMatrix4fv(loc,false,buf);
 	}
 	
 	public void delete() {

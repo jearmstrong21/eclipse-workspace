@@ -7,6 +7,7 @@ import org.lwjgl.system.*;
 
 import java.io.File;
 import java.nio.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -62,17 +63,6 @@ public class GLWindow implements GLResource {
 	private int height;
 	private String title;
 	
-	static {
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				glfwTerminate();
-				System.out.println("Terminating GLFW");
-			}
-		}));
-	}
-	
 	public void hints() {
 		hints(4,1,true,ProfileType.Core);
 	}
@@ -83,6 +73,12 @@ public class GLWindow implements GLResource {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, forwardCompat?GLFW_TRUE:GLFW_FALSE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
+	}
+	
+	public ArrayList<Character>keys=new ArrayList<Character>();
+	
+	public boolean isKeyDown(char c) {
+		return keys.contains(c);
 	}
 	
 	public void gen() {
@@ -100,7 +96,14 @@ public class GLWindow implements GLResource {
 			
 			@Override
 			public void invoke(long window, int key, int scancode, int action, int mods) {
-				
+				if(action==GLFW_PRESS) {
+					keys.add((char)key);
+//					System.out.println("Added key "+((char)key));
+				}
+				if(action==GLFW_RELEASE) {
+					keys.remove(new Character((char)key));
+//					System.out.println("Removed key "+((char)key));
+				}
 			}
 		});
 		glfwSetMouseButtonCallback(id, new GLFWMouseButtonCallback() {
