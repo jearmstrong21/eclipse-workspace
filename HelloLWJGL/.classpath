@@ -6,36 +6,36 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-glfw-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-glfw.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-glfw-sources.jar">
+	<classpathentry kind="lib" path="lwjgl/lwjgl/lwjgl-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl/lwjgl/lwjgl.jar" sourcepath="lwjgl/lwjgl/lwjgl-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-glfw-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl/lwjgl/lwjgl-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-openal-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-openal.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-openal-sources.jar">
+	<classpathentry kind="lib" path="lwjgl/opengl/lwjgl-opengl-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl/opengl/lwjgl-opengl.jar" sourcepath="lwjgl/opengl/lwjgl-opengl-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-openal-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl/opengl/lwjgl-opengl-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-opengl-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-opengl.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-opengl-sources.jar">
+	<classpathentry kind="lib" path="lwjgl/stb/lwjgl-stb-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl/stb/lwjgl-stb.jar" sourcepath="lwjgl/stb/lwjgl-stb-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-opengl-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl/stb/lwjgl-stb-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-stb-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl-stb.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-stb-sources.jar">
+	<classpathentry kind="lib" path="lwjgl/glfw/lwjgl-glfw-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl/glfw/lwjgl-glfw.jar" sourcepath="lwjgl/glfw/lwjgl-glfw-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/sources/lwjgl-stb-sources.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl/glfw/lwjgl-glfw-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lwjgl-release-3.1.6-custom/lwjgl.jar" sourcepath="lwjgl-release-3.1.6-custom/sources/lwjgl-sources.jar">
+	<classpathentry kind="lib" path="lwjgl/assimp/lwjgl-assimp-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl/assimp/lwjgl-assimp.jar" sourcepath="lwjgl/assimp/lwjgl-assimp-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl-release-3.1.6-custom/javadoc/lwjgl-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloLWJGL/lwjgl/assimp/lwjgl-assimp-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="joml-jdk8-1.9.9.jar" sourcepath="joml-1.9.9-sources.jar"/>
+	<classpathentry kind="lib" path="joml/joml-jdk8-1.9.9.jar" sourcepath="joml/joml-1.9.9-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
