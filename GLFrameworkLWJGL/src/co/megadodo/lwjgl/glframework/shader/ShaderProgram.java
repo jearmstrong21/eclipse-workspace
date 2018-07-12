@@ -51,6 +51,15 @@ public class ShaderProgram implements GLResource  {
 	public static int compileShaderFiles(int type, String strType, String filename) {
 		return compileShader(type,strType,Utilities.loadStrFromFile(filename));
 	}
+	
+	public static ShaderProgram createShader(String vfn,String ffn) {
+		ShaderProgram sp=new ShaderProgram();
+		sp.gen();
+		sp.attach(vfn, GL_VERTEX_SHADER);
+		sp.attach(ffn,GL_FRAGMENT_SHADER);
+		sp.link();
+		return sp;
+	}
 
 	public int id;
 	

@@ -1,4 +1,4 @@
-package co.megadodo.lwjgl.glframework.test;
+package test;
 
 import co.megadodo.lwjgl.glframework.GLRenderable;
 import co.megadodo.lwjgl.glframework.GLResource;

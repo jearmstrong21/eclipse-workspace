@@ -15,6 +15,10 @@ import co.megadodo.lwjgl.glframework.utils.Utilities;
 
 public class ModelLoader {
 
+	public static Mesh[] loadModel(String fn) {
+		return loadModel(fn,Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_Triangulate | Assimp.aiProcess_FixInfacingNormals);
+	}
+	
 	public static Mesh[] loadModel(String fileName, int flags) {
 		AIScene aiScene = Assimp.aiImportFile(fileName, flags);
 		

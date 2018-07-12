@@ -122,12 +122,12 @@ public class GLWindow implements GLResource {
 				if(action==GLFW_PRESS) {
 					keys.add((char)key);
 					justPressed.add((char)key);
-					System.out.println("Added key "+((char)key));
+//					System.out.println("Added key "+((char)key));
 				}
 				if(action==GLFW_RELEASE) {
 					keys.remove(Character.valueOf((char)key));
 					justReleased.add((char)key);
-					System.out.println("Removed key "+((char)key));
+//					System.out.println("Removed key "+((char)key));
 				}
 			}
 		});
@@ -145,7 +145,7 @@ public class GLWindow implements GLResource {
 				
 			}
 		});
-		GL.createCapabilities();
+		bind();
 	}
 	
 	public float getMouseX() {
@@ -163,10 +163,6 @@ public class GLWindow implements GLResource {
 	}
 	
 	public void bind() {
-		createGL();
-	}
-	
-	public void createGL() {
 		glfwMakeContextCurrent(id);
 		GL.createCapabilities();
 	}
@@ -199,16 +195,8 @@ public class GLWindow implements GLResource {
 	}
 	
 	public void unbind() {
-		endLoop();
-	}
-	
-	public void endLoop() {
 		glfwSwapBuffers(id);
 		glfwPollEvents();
-	}
-	
-	public void destroy() {
-		delete();
 	}
 	
 	public void delete() {
