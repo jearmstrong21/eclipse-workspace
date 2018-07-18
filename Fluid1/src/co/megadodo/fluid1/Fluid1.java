@@ -78,7 +78,7 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 	final Vec2 G = new Vec2(0.f, 12000 * 9.8f); // external (gravitational) forces
 	final float REST_DENS = 1000.f; // rest density
 	final float GAS_CONST = 2000.f; // const for equation of state
-	final float H = 20.f; // kernel radius
+	final float H = 30.f; // kernel radius
 	final float DISPLAY_SIZE=H;
 	final float HSQ = H * H; // radius^2 for optimization
 	final float MASS = 65.f; // assume all particles have the same mass
@@ -235,7 +235,7 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 		// TODO Auto-generated method stub
 		for(Particle p:particles) {
 			p.x.x=rand(0,100);
-			p.x.y=rand(frame.getHeight()-300,frame.getHeight()-50);
+			p.x.y=rand(0,frame.getHeight());
 			p.v=new Vec2(0,0);
 			p.f=new Vec2(0,0);
 			p.rho=0;

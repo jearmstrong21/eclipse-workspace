@@ -6,8 +6,19 @@ import java.util.Scanner;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class Utilities {
+	
+	public static JSONObject loadJSONObject(String fn) {
+		return new JSONObject(new JSONTokener(loadStrFromFile(fn)));
+	}
+	
+	public static JSONArray loadJSONArray(String fn) {
+		return new JSONArray(new JSONTokener(loadStrFromFile(fn)));
+	}
 
 	public static String loadStrFromFile(String fn) {
 		try {

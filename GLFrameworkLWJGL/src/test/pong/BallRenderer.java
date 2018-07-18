@@ -1,6 +1,10 @@
 package test.pong;
 
+import org.joml.Matrix4f;
+
 import co.megadodo.lwjgl.glframework.buffer.AttribType;
+import co.megadodo.lwjgl.glframework.buffer.BufferTarget;
+import co.megadodo.lwjgl.glframework.buffer.BufferUsage;
 import co.megadodo.lwjgl.glframework.buffer.PolygonMode;
 import co.megadodo.lwjgl.glframework.buffer.VertexArray;
 import co.megadodo.lwjgl.glframework.buffer.VertexBuffer;
@@ -9,64 +13,62 @@ import co.megadodo.lwjgl.glframework.shader.ShaderType;
 import co.megadodo.lwjgl.glframework.utils.Utilities;
 
 public class BallRenderer {
-	
+
+	ShaderProgram ballShader;
+	VertexBuffer vboPos;
+	VertexBuffer ebo;
+	VertexArray vao;
+
 	public void init() {
-		
-		float[]posData=new float[] {-1,-1,0,    -1,1,0,   1,1,0,   1,-1,0};
-		byte[]triData=new byte[] {0,1,2,0,2,3};
-		
-		vao=new VertexArray();
+
+		ballShader = new ShaderProgram();
+		ballShader.gen();
+		ballShader.attach(ShaderProgram.compileShader(ShaderType.Fragment, "fragment",
+				Utilities.loadStrFromFile("Shaders/pong/ball.frag")));
+		ballShader.attach(ShaderProgram.compileShader(ShaderType.Vertex, "vertex",
+				Utilities.loadStrFromFile("Shaders/pong/ball.vert")));
+		ballShader.link();
+
+		vao = new VertexArray();
 		vao.gen();
 		vao.bind();
-		
-		vbo=new VertexBuffer();
-		vbo.gen();
-		vbo.bind();
-		vbo.setData(posData);
-		vbo.addVertexAttrib(0, 3, AttribType.Float, false, 3, 0);
-		vbo.unbind();
-		
-		ebo=new VertexBuffer();
+
+		float[] posData = new float[] { -1, -1, 0, -1, 1, 0, 1, 1, 0, 1, -1, 0 };
+		int[] triData = new int[] { 0, 1, 2, 0, 2, 3 };
+
+		vboPos = new VertexBuffer();
+		vboPos.usage = BufferUsage.StaticDraw;
+		vboPos.target = BufferTarget.Array;
+		vboPos.gen();
+		vboPos.bind();
+		vboPos.setData(posData);
+		vboPos.addVertexAttrib(0, 3, AttribType.Float, false, 3, 0);
+		vboPos.unbind();
+
+		ebo = new VertexBuffer();
+		ebo.usage = BufferUsage.StaticDraw;
+		ebo.target = BufferTarget.ElementArray;
 		ebo.gen();
 		ebo.bind();
 		ebo.setDataUnsigned(triData);
 		ebo.unbind();
-		
+
 		vao.unbind();
-		
-		sp=new ShaderProgram();
-		sp.gen();
-		sp.attach(ShaderProgram.compileShader(ShaderType.Fragment, "fragment", Utilities.loadStrFromFile("Shaders/pong/ball.frag")));
-		sp.attach(ShaderProgram.compileShader(ShaderType.Vertex, "vertex", Utilities.loadStrFromFile("Shaders/pong/ball.vert")));
-		sp.link();
-		System.out.println(sp.id+" "+vao.id+" "+vbo.id+" "+ebo.id);
 	}
-	
-	public VertexArray vao;
-	public VertexBuffer vbo,ebo;
-	public ShaderProgram sp;
-	
-	public float x,y,rad,r,g,b;
-	
-	public void render() {
-		sp.bind();
-		
+
+	public void render(float ballX,float ballY,float ballSize,float r,float g,float b) {
+		ballShader.bind();
+		Matrix4f ballMat = new Matrix4f().identity().translate(ballX, ballY, 0).scale(ballSize);
+		ballShader.setMat4("matrix", ballMat);
+		ballShader.setFloat("r", r);
+		ballShader.setFloat("g", g);
+		ballShader.setFloat("b", b);
 		vao.bind();
-		
 		ebo.bind();
 		ebo.render(PolygonMode.Fill);
 		ebo.unbind();
-		
 		vao.unbind();
-		
-		sp.unbind();
-	}
-	
-	public void delete() {
-		vao.delete();
-		vbo.delete();
-		ebo.delete();
-		sp.delete();
+		ballShader.unbind();
 	}
 
 }

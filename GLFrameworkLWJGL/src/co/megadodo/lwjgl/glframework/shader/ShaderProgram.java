@@ -107,6 +107,10 @@ public class ShaderProgram implements GLResource  {
 		glUniform1f(glGetUniformLocation(id,paramName),f);
 	}
 	
+	public void setVec2(String paramName,float x,float y) {
+		glUniform2f(glGetUniformLocation(id,paramName), x, y);
+	}
+	
 	public void setBool(String paramName,boolean b) {
 		glUniform1i(glGetUniformLocation(id,paramName),b?1:0);
 	}
