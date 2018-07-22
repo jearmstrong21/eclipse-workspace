@@ -51,6 +51,10 @@ public class GLUtilities {
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 	}
+	
+	public static void disableDepth() {
+		glDisable(GL_DEPTH_TEST);
+	}
 
 	public static void printGLInfo() {
 		String version = glGetString(GL_VERSION);

@@ -1,7 +1,5 @@
 package co.megadodo.lwjgl.glframework.texture;
 
-import co.megadodo.lwjgl.glframework.*;
-
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -33,8 +31,14 @@ import static org.lwjgl.opengl.GL45.*;
 import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
-
 import static org.lwjgl.stb.STBImage.*;
+
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
+import org.lwjgl.system.MemoryStack;
+
+import co.megadodo.lwjgl.glframework.GLResource;
 
 public class Texture implements GLResource {
 	
@@ -72,7 +76,7 @@ public class Texture implements GLResource {
 		this.data=data;
 		width=w;
 		height=h;
-		glTexImage2D(target,0,GL_RGBA8,w,h,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
+		glTexImage2D(target,0,GL_RGB,w,h,0,GL_RGB,GL_UNSIGNED_BYTE,data);
 	}
 	
 	public static void activateUnit(int i) {
@@ -104,6 +108,7 @@ public class Texture implements GLResource {
 	
 	public static Texture createTexture(int w,int h,ByteBuffer img) {
 		Texture t=new Texture();
+		t.target=TextureTarget.Tex2D;
 		t.gen();
 		t.bind();
 		t.setParam(WRAP_U, CLAMP_TO_BORDER);
@@ -116,7 +121,7 @@ public class Texture implements GLResource {
 	}
 	
 	public void unbind() {
-		glBindTexture(target,0);
+		glBindTexture(GL_TEXTURE_2D,0);
 	}
 	
 	public void delete() {

@@ -77,6 +77,20 @@ public class GLWindow implements GLResource {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
 	}
 	
+	public int getFBOWidth() {
+		int[]w=new int[1];
+		int[]h=new int[1];
+		glfwGetFramebufferSize(id, w, h);
+		return w[0];
+	}
+	
+	public int getFBOHeight() {
+		int[]w=new int[1];
+		int[]h=new int[1];
+		glfwGetFramebufferSize(id, w, h);
+		return h[0];
+	}
+	
 	public void requestFocus() {
 		hide();
 		show();

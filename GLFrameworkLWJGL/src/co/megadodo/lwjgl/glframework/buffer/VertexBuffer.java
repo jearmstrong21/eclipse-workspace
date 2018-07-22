@@ -43,6 +43,7 @@ public class VertexBuffer implements GLResource, GLRenderable {
 	public int usage;
 	
 	public int polyMode;
+	public int provokeMode;
 	
 	public void gen() {
 		id=glGenBuffers();
@@ -105,11 +106,12 @@ public class VertexBuffer implements GLResource, GLRenderable {
 	}
 	
 	public void render() {
-		render(polyMode);
+		render(provokeMode, polyMode);
 	}
 	
-	public void render(int polygonMode) {
+	public void render(int provoke, int polygonMode) {
 		glPolygonMode(GL_FRONT_AND_BACK,polygonMode);
+		glProvokingVertex(provoke);
 		if(target==BufferTarget.ElementArray) {
 			glDrawElements(GL_TRIANGLES, num_data, data_type, 0);
 		}
