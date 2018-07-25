@@ -60,10 +60,6 @@ public class Framebuffer implements GLResource {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, tex.id, 0);
 	}
 	
-	public void attachRBO(Renderbuffer rbo) {
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo.id);
-	}
-	
 	public void delete() {
 		glDeleteFramebuffers(id);
 	}

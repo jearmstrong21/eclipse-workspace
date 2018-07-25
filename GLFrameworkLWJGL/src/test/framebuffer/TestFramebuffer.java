@@ -2,8 +2,6 @@ package test.framebuffer;
 
 import java.util.ArrayList;
 
-import org.lwjgl.opengl.GL11;
-
 import co.megadodo.lwjgl.glframework.Mathf;
 import co.megadodo.lwjgl.glframework.buffer.AttribType;
 import co.megadodo.lwjgl.glframework.buffer.BufferTarget;
@@ -14,7 +12,6 @@ import co.megadodo.lwjgl.glframework.buffer.VertexArray;
 import co.megadodo.lwjgl.glframework.buffer.VertexBuffer;
 import co.megadodo.lwjgl.glframework.framebuffer.FBOAttachment;
 import co.megadodo.lwjgl.glframework.framebuffer.Framebuffer;
-import co.megadodo.lwjgl.glframework.framebuffer.Renderbuffer;
 import co.megadodo.lwjgl.glframework.shader.ShaderProgram;
 import co.megadodo.lwjgl.glframework.shader.ShaderType;
 import co.megadodo.lwjgl.glframework.texture.Texture;
@@ -90,13 +87,8 @@ public class TestFramebuffer {
 		fbo.bind();
 		
 		Texture colBuffer=Texture.createTexture(window.getFBOWidth(), window.getFBOHeight(), null);
-		fbo.attachTex(colBuffer, FBOAttachment.ColorAttatchment0);
+		fbo.attachTex(colBuffer, FBOAttachment.ColorAttachment0);
 		
-		Renderbuffer rbo=new Renderbuffer();
-		rbo.gen();
-		rbo.bind();
-		rbo.storage(window.getFBOWidth(),window.getFBOHeight());
-		fbo.attachRBO(rbo);
 		if(!fbo.complete())System.exit(1);
 		fbo.unbind();
 		
@@ -164,7 +156,7 @@ public class TestFramebuffer {
 			spQuad.setTexture("tex", 0);
 			spQuad.setFloat("texW", window.getWidth());
 			spQuad.setFloat("texH", window.getHeight());
-			spQuad.setFloat("blurRad", (int)(window.getMouseX()/50.0f));
+			spQuad.setFloat("blurRad", (int)(window.getMouseX()/20.0f));
 			vaoQuad.bind();
 			eboQuad.bind();
 			eboQuad.render(ProvokingVertex.First, PolygonMode.Fill);

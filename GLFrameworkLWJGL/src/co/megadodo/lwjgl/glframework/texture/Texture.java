@@ -76,7 +76,7 @@ public class Texture implements GLResource {
 		this.data=data;
 		width=w;
 		height=h;
-		glTexImage2D(target,0,GL_RGB,w,h,0,GL_RGB,GL_UNSIGNED_BYTE,data);
+		glTexImage2D(target,0,GL_RGBA,w,h,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
 	}
 	
 	public static void activateUnit(int i) {
@@ -104,6 +104,10 @@ public class Texture implements GLResource {
 			h=ibh.get();
 		}
 		return createTexture(w,h,img);
+	}
+	
+	public static Texture createEmptyTexture(int w,int h) {
+		return createTexture(w,h,null);
 	}
 	
 	public static Texture createTexture(int w,int h,ByteBuffer img) {

@@ -1,4 +1,4 @@
-package co.megadodo.fluid1;
+package co.megadodo.fluid2;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,17 +11,17 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener {
+public class Fluid2 extends JPanel implements MouseListener, MouseMotionListener {
 
 	public static void main(String[] args) {
-		new Fluid1();
+		new Fluid2();
 	}
 	
 	JFrame frame;
 
-	public Fluid1() {
-		frame = new JFrame("Fluid 1");
-		frame.setSize(1000, 1000);
+	public Fluid2() {
+		frame = new JFrame("Fluid 2");
+		frame.setSize(900, 900);
 		frame.add(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -66,6 +66,11 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 	class Particle {
 		Vec2 x, v, f;
 		float rho, p;
+		int gridX,gridY;
+		void computeGridPos() {
+			gridX=(int)(x.x/cellW);
+			gridY=(int)(x.y/cellH);
+		}
 	}
 
 	public void paint(Graphics g) {
@@ -78,7 +83,7 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 	final Vec2 G = new Vec2(0.f, 12000 * 9.8f); // external (gravitational) forces
 	final float REST_DENS = 1000.f; // rest density
 	final float GAS_CONST = 2000.f; // const for equation of state
-	final float H = 30.f; // kernel radius
+	final float H = 20.f; // kernel radius
 	final float DISPLAY_SIZE=H;
 	final float HSQ = H * H; // radius^2 for optimization
 	final float MASS = 65.f; // assume all particles have the same mass
@@ -91,51 +96,81 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 	final float VISC_LAP = 45.f / ((float) Math.PI * (float) Math.pow(H, 6.f));
 	
 	// simulation parameters
-	final float EPS = 50; // boundary epsilon
+	final float EPS = 40; // boundary epsilon
 	final float BOUND_DAMPING = -0.5f;
 
 	ArrayList<Particle> particles;
 
 	public void initSim() {
+		gridW=(int)(frame.getWidth()/H);
+		gridH=(int)(frame.getHeight()/H);
+		cellW=frame.getWidth()/gridW;
+		cellH=frame.getHeight()/gridH;
+		grid=new Box[gridW][gridH];
 		particles = new ArrayList<Particle>();
-		for(int i=0;i<1000;i++)addRandParticle(frame.getWidth()/2,frame.getHeight()/2);
-		System.out.println(POLY6);
-		System.out.println(SPIKY_GRAD);
-		System.out.println(VISC_LAP);
-//		System.out.printf
-//		for (int i = 0; i < 300; i++) {
-//			Particle p = new Particle();
-//			p.x = new Vec2(rand(0, 500), rand(0, 500));
-//			p.v = new Vec2(0, 0);
-//			p.f = new Vec2(0, 0);
-//			p.rho = 0;
-//			p.p = 0;
-//			particles.add(p);
-//		}
-//		for(int x=0;x<20;x++) {
-//			for(int y=0;y<20;y++) {
-//				float realX=x*10;
-//				float realY=500-y*10;
-//				Particle p=new Particle();
-//				p.x=new Vec2(realX,realY);
-//				p.v=new Vec2(0,0);
-//				p.f=new Vec2(0,0);
-//				p.rho=0;
-//				p.p=0;
-//				particles.add(p);
+		for(int i=0;i<1000;i++)addParticle(frame.getWidth()/2+rand(-100,100),frame.getHeight()/2+rand(-100,100));
+//		for(int x=0;x<100;x++) {
+//			for(int y=0;y<15;y++) {
+//				addParticle(map(x,0,100,100,frame.getWidth()-100),map(y,0,15,100,frame.getHeight()-100));
 //			}
 //		}
+		initializing=false;
+	}//add gridding
+	boolean initializing=true;
+	
+	float lerp(float t,float a,float b) {
+		return a+(b-a)*t;
+	}
+	
+	float norm(float t,float a,float b) {
+		return (t-a)/(b-a);
+	}
+	
+	float map(float t,float s1,float e1,float s2,float e2) {
+		return lerp(norm(t,s1,e1),s2,e2);
 	}
 
 	float rand(float mi, float ma) {
 		return (float) Math.random() * (ma - mi) + mi;
 	}
-
+	
+	class Box{
+		ArrayList<Particle>particles=new ArrayList<Particle>();
+		void add(Particle p) {
+			particles.add(p);
+		}
+	}
+	
+	Box[][]grid;
+	int gridW;
+	int gridH;
+	int cellW;
+	int cellH;
+	
 	public void stepSim() {
+		if(initializing)return;
+		for(int i=0;i<gridW;i++) {
+			for(int j=0;j<gridH;j++) {
+				grid[i][j]=new Box();
+			}
+		}
+		for(Particle p:particles) {
+			p.computeGridPos();
+			int i=p.gridX;
+			int j=p.gridY;
+			int r=1;
+			for(int x=i-r;x<=i+r;x++) {
+				for(int y=j-r;y<=j+r;y++) {
+					if(x<0||y<0||x>=gridW||y>=gridH)continue;
+					grid[x][y].add(p);
+				}
+			}
+		}
+		//add gridding computation
 		// ComputeDensityPressure()
 		for (Particle pi : particles) {
 			pi.rho = 0;
-			for (Particle pj : particles) {
+			for (Particle pj : grid[pi.gridX][pi.gridY].particles) {
 				Vec2 rij = pi.x.sub(pj.x);
 				float r2 = rij.squaredMag();
 				if (r2 < HSQ) {
@@ -149,7 +184,7 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 		for (Particle pi : particles) {
 			Vec2 fpress = new Vec2(0, 0);
 			Vec2 fvisc = new Vec2(0, 0);
-			for (Particle pj : particles) {
+			for (Particle pj : grid[pi.gridX][pi.gridY].particles) {
 				if (pi == pj)
 					continue;
 				Vec2 rij = pj.x.sub(pi.x);
@@ -158,9 +193,6 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 					fpress = fpress.sub(rij.normalize()
 							.mult(MASS * (pi.p + pj.p) / (2.f * pj.rho) * SPIKY_GRAD * (float) Math.pow(H - r, 2.f)));
 					fvisc = fvisc.add((pj.v.sub(pi.v)).mult(VISC * MASS / pj.rho * VISC_LAP * (H - r)));
-					if(pj.rho==0) {
-						System.out.printf("fpress=%f,%f, fvisc=%f,%f, NaN/NaN=%f, NaN/0=%f, 0/NaN=%f, NaN/1=%f, 1/NAN=%f\n",fpress.x,fpress.y,fvisc.x,fvisc.y,(Float.NaN/Float.NaN),(Float.NaN)/0.0f,0.0f/Float.NaN,Float.NaN/1.0f,1.0f/Float.NaN);
-					}
 				}
 			}
 	        Vec2 fgrav = G.mult(pi.rho);
@@ -170,19 +202,19 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 		for(Particle p:particles) {
 			p.v=p.v.add(p.f.mult(DT/p.rho));
 			p.x=p.x.add(p.v.mult(DT));
-			if(p.x.x-EPS < 0) {
+			if(p.x.x < EPS) {
 				p.v.x*=BOUND_DAMPING;
 				p.x.x=EPS;
 			}
-			if(p.x.x+EPS>frame.getWidth()) {
+			if(p.x.x>frame.getWidth()-EPS) {
 				p.v.x*=BOUND_DAMPING;
 				p.x.x=frame.getWidth()-EPS;
 			}
-			if(p.x.y-EPS<0) {
+			if(p.x.y<EPS) {
 				p.v.y*=BOUND_DAMPING;
 				p.x.y=EPS;
 			}
-			if(p.x.y+EPS>frame.getHeight()) {
+			if(p.x.y>frame.getHeight()-EPS) {
 				p.v.y*=BOUND_DAMPING;
 				p.x.y=frame.getHeight()-EPS;
 			}
@@ -192,19 +224,27 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 	float pi=(float)Math.PI;
 	int frames=0;
 	public void displaySim(Graphics2D g2d) {
-		g2d.setColor(Color.BLACK);
+		if(initializing)return;
+		g2d.setColor(Color.WHITE);
 		int r=(int)DISPLAY_SIZE;
 		g2d.fillRect(0, 0, frame.getWidth(), frame.getHeight());
 		for (Particle p : particles) {
 //			float ang=(float)Math.atan2(p.v.y, p.v.x);
 //			float ang=(p.rho*7500f)%360;
 //			float ang=(p.p*10)%360;
-			float ang=p.p;
+//			float ang=p.p;
+			float ang=(float)Math.toRadians(45);
 //			h=255*(float)((Math.atan2(p.v.y, p.v.x)+Math.PI)/Math.PI/2.0f);
 			g2d.setColor(Color.getHSBColor((ang+pi)/pi/2,1,1));
 //			g2d.setColor(Color.WHITE);
 			g2d.fillOval((int) p.x.x - r/2, (int) p.x.y - r/2, r, r);
 		}
+//		for(int x=0;x<gridW;x++) {
+//			for(int y=0;y<gridH;y++) {
+//				g2d.setColor(Color.BLACK);
+//				g2d.drawRect(x*cellW, y*cellH, cellW, cellH);
+//			}
+//		}
 		frames++;
 	}
 	@Override
@@ -246,9 +286,11 @@ public class Fluid1 extends JPanel implements MouseListener, MouseMotionListener
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		addRandParticle(e.getX(),e.getY());
+//		if(frames%2==0) {
+		addParticle(e.getX(),e.getY());
+//		}
 	}
-	void addRandParticle(int x,int y) {
+	void addParticle(float x,float y) {
 		Particle p=new Particle();
 		p.x=new Vec2(x+rand(-30,30),y+rand(-30,30));
 		p.v=new Vec2(0,0);
