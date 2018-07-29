@@ -83,7 +83,7 @@ public class Fluid2 extends JPanel implements MouseListener, MouseMotionListener
 	final Vec2 G = new Vec2(0.f, 12000 * 9.8f); // external (gravitational) forces
 	final float REST_DENS = 1000.f; // rest density
 	final float GAS_CONST = 2000.f; // const for equation of state
-	final float H = 20.f; // kernel radius
+	final float H = 25.f; // kernel radius
 	final float DISPLAY_SIZE=H;
 	final float HSQ = H * H; // radius^2 for optimization
 	final float MASS = 65.f; // assume all particles have the same mass

@@ -115,6 +115,11 @@ public class ShaderProgram implements GLResource  {
 		glUniform1i(glGetUniformLocation(id,paramName),b?1:0);
 	}
 	
+	public void setRoutine(int shader, String name) {
+		int loc=glGetSubroutineIndex(id, shader, name);
+		glUniformSubroutinesuiv(shader, new int[] {loc});
+	}
+	
 	public void setMat4(String paramName,Matrix4f m) {
 		int loc=glGetUniformLocation(id,paramName);
 		FloatBuffer buf=BufferUtils.createFloatBuffer(16);
