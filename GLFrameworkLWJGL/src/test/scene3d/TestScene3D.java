@@ -1,5 +1,11 @@
 package test.scene3d;
 
+import java.awt.GridLayout;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import org.joml.Matrix4f;
 
 import co.megadodo.lwjgl.glframework.Mathf;
@@ -10,24 +16,27 @@ import co.megadodo.lwjgl.glframework.buffer.PolygonMode;
 import co.megadodo.lwjgl.glframework.buffer.ProvokingVertex;
 import co.megadodo.lwjgl.glframework.buffer.VertexArray;
 import co.megadodo.lwjgl.glframework.buffer.VertexBuffer;
+import co.megadodo.lwjgl.glframework.framebuffer.FBOAttachment;
+import co.megadodo.lwjgl.glframework.framebuffer.Framebuffer;
 import co.megadodo.lwjgl.glframework.model.Mesh;
 import co.megadodo.lwjgl.glframework.model.ModelLoader;
 import co.megadodo.lwjgl.glframework.shader.ShaderProgram;
 import co.megadodo.lwjgl.glframework.shader.ShaderType;
+import co.megadodo.lwjgl.glframework.texture.Texture;
 import co.megadodo.lwjgl.glframework.utils.GLUtilities;
 import co.megadodo.lwjgl.glframework.window.GLWindow;
 import co.megadodo.lwjgl.glframework.window.ProfileType;
 
 public class TestScene3D {
 	
-	public static class Teapot{
+	public static class ModelRenderer{
 		VertexArray vao;
 		VertexBuffer vboPos;
 		VertexBuffer vboUV;
 		VertexBuffer vboNorms;
 		VertexBuffer ebo;
 		Mesh mesh;
-		public Teapot(Mesh m) {
+		public ModelRenderer(Mesh m) {
 			mesh=m;
 		}
 		
@@ -91,7 +100,140 @@ public class TestScene3D {
 		}
 	}
 	
+	public static class CubeRenderer {
+		VertexArray vao;
+		VertexBuffer vboPos,vboUV;
+		VertexBuffer ebo;
+		public CubeRenderer() {
+			
+		}
+		
+		public void gen() {
+			vao=new VertexArray();
+			vao.gen();
+			vao.bind();
+			
+			vboPos=new VertexBuffer();
+			vboPos.usage=BufferUsage.StaticDraw;
+			vboPos.target=BufferTarget.Array;
+			vboPos.gen();
+			vboPos.bind();
+			vboPos.setData(new float[] {-1,-1,-1, -1,-1,1,  -1,1,1,  -1,1,-1,
+									1,-1,-1,  1,-1,1,  1,1,1,  1,1,-1,
+									-1,-1,-1,  -1,-1,1,  1,-1,1,  1,-1,-1,
+									-1,1,-1,  -1,1,1,  1,1,1,  1,1,-1,
+									-1,-1,-1, -1,1,-1,  1,1,-1,  1,-1,-1,
+									-1,-1,1,  -1,1,1,  1,1,1,  1,-1,1});
+			vboPos.addVertexAttrib(0, 3, AttribType.Float, false, 3, 0);
+			vboPos.unbind();
+			
+			vboUV=new VertexBuffer();
+			vboUV.usage=BufferUsage.StaticDraw;
+			vboUV.target=BufferTarget.Array;
+			vboUV.gen();
+			vboUV.bind();
+			vboUV.setData(new float[] {0,0,  1,0,  1,1,  0,1,
+										0,0, 1,0,  1,1,  0,1,
+										0,0,  1,0,  1,1,  0,1,
+										0,0,  1,0,  1,1,  0,1,
+										0,0,  1,0,  1,1,  0,1,
+										0,0,  1,0,  1,1,  0,1});
+			vboUV.addVertexAttrib(1, 2, AttribType.Float, false, 2, 0);
+			vboUV.unbind();
+			
+			ebo=new VertexBuffer();
+			ebo.usage=BufferUsage.StaticDraw;
+			ebo.target=BufferTarget.ElementArray;
+			ebo.gen();
+			ebo.bind();
+			ebo.setDataUnsigned(new int[] {0,1,2,  0,2,3,
+										   4,5,6,  4,6,7,
+										   8,9,10, 8,10,11,
+										   12,13,14,  12,14,15,
+										   16,17,18,  16,18,19,
+										   20,21,22,  20,22,23});
+			ebo.unbind();
+			
+			vao.unbind();
+		}
+		
+		public void render() {
+			vao.bind();
+			ebo.bind();
+			ebo.render(ProvokingVertex.First, PolygonMode.Fill);
+			ebo.unbind();
+			vao.unbind();
+		}
+		
+		public void delete() {
+			vao.delete();
+			vboPos.delete();
+			vboUV.delete();
+			ebo.delete();
+		}
+	}
+	
+	public static class PlaneRenderer{
+		VertexArray vao;
+		VertexBuffer vboPos,vboUV;
+		VertexBuffer ebo;
+		
+		public PlaneRenderer() {
+			
+		}
+		
+		public void gen() {
+			vao=new VertexArray();
+			vao.gen();
+			vao.bind();
+			
+			vboPos=new VertexBuffer();
+			vboPos.usage=BufferUsage.StaticDraw;
+			vboPos.target=BufferTarget.Array;
+			vboPos.gen();
+			vboPos.bind();
+			vboPos.setData(new float[] {-1,-1,0,  -1,1,0,  1,1,0,  1,-1,0});
+			vboPos.addVertexAttrib(0, 3, AttribType.Float, false, 3, 0);
+			vboPos.unbind();
+			
+			vboUV=new VertexBuffer();
+			vboUV.usage=BufferUsage.StaticDraw;
+			vboUV.target=BufferTarget.Array;
+			vboUV.gen();
+			vboUV.bind();
+			vboUV.setData(new float[] {0,0,  0,1,  1,1,  1,0});
+			vboUV.addVertexAttrib(1, 2, AttribType.Float, false, 2, 0);
+			vboUV.unbind();
+			
+			ebo=new VertexBuffer();
+			ebo.usage=BufferUsage.StaticDraw;
+			ebo.target=BufferTarget.ElementArray;
+			ebo.gen();
+			ebo.bind();
+			ebo.setDataUnsigned(new int[] {0,1,2,  0,2,3});
+			ebo.unbind();
+			
+			vao.unbind();
+		}
+		
+		public void render() {
+			vao.bind();
+			ebo.bind();
+			ebo.render(ProvokingVertex.First,PolygonMode.Fill);
+			ebo.unbind();
+			vao.unbind();
+		}
+		
+		public void delete() {
+			vao.delete();
+			vboPos.delete();
+			vboUV.delete();
+			ebo.delete();
+		}
+	}
+	
 	public static void main(String[]args) {
+		
 		GLWindow.initGLFW();
 		
 		GLWindow window=new GLWindow();
@@ -101,47 +243,126 @@ public class TestScene3D {
 		window.setTitle("Test 3D scene");
 		window.bind();
 		
-		Mesh mesh=ModelLoader.loadModel("Models/teapot.obj")[0];
 		
+//		String meshName="ogre";
+//		float scale=30;
+		String meshName="teapot";
+		float scale=1;
+		Mesh mesh=ModelLoader.loadModel("Models/"+meshName+".obj")[0];
 		
-		Teapot tp=new Teapot(mesh);
-		tp.gen();
+		ModelRenderer model=new ModelRenderer(mesh);
+		model.gen();
 		
-		ShaderProgram shader=new ShaderProgram();
-		shader.gen();
-		shader.attach("Shaders/test/scene3d/teapot.frag", ShaderType.Fragment);
-		shader.attach("Shaders/test/scene3d/teapot.vert", ShaderType.Vertex);
-		shader.link();
+		ShaderProgram modelShader=new ShaderProgram();
+		modelShader.gen();
+		modelShader.attach("Shaders/test/scene3d/model.frag", ShaderType.Fragment);
+		modelShader.attach("Shaders/test/scene3d/model.vert", ShaderType.Vertex);
+		modelShader.link();
 		
-		int NORMALS=0;
-		int UV=1;
-		int type=NORMALS;
+		ShaderProgram fxShader=new ShaderProgram();//fx=effects
+		fxShader.gen();
+		fxShader.attach("Shaders/test/scene3d/fx.frag", ShaderType.Fragment);
+		fxShader.attach("Shaders/test/scene3d/fx.vert", ShaderType.Vertex);
+		fxShader.link();
+		
+		Framebuffer fbo=new Framebuffer();
+		fbo.gen();
+		fbo.bind();
+		fbo.createDepthRBO(window.getFBOWidth(), window.getFBOHeight());
+		Texture colBuffer=Texture.createEmptyTexture(window.getFBOWidth(), window.getFBOHeight());
+		fbo.attachTex(colBuffer, FBOAttachment.ColorAttachment0);
+		
+		if(!fbo.complete())System.exit(1);
+		fbo.unbind();
+		
+		CubeRenderer cube=new CubeRenderer();
+		cube.gen();
+		
+		PlaneRenderer plane=new PlaneRenderer();
+		plane.gen();
+		
+		final int NORMALS=0;
+		final int UV=1;
+		int teapotRenderType=NORMALS;
+		
+		final int CUBE=0;
+		final int PLANE=1;
+		int fxDisplayType=PLANE;
 		
 		GLUtilities.printGLInfo();
+		//TODO:  make kernels subroutines
+		//TODO:  print options to console after printGLInfo()\n\n
+		//TODO:  key to swap plane and cube
+		//TODO:  fix fbo depth, is rbo depth attachment needed?
+		//TODO:  swing ui for kernel selection / CUBE-PLANE selection / NORMALS - UV selection
 		
 		while(window.isOpen()) {
 			window.bind();
-//			window.clearInputs();
-			GLUtilities.clearScreen(1, 1, 1);
+			
+			Matrix4f proj=new Matrix4f().identity().perspective(Mathf.toRadians(80), window.getWidth()/window.getHeight(), 0.01f, 100);
+			
+			fbo.bind();
+			GLUtilities.clearScreen(0, 0, 0);
 			GLUtilities.enableDepth();
 			
 			float time=GLUtilities.getTime();
 			
-			if(window.isKeyDown('1'))type=NORMALS;
-			if(window.isKeyDown('2'))type=UV;
+			if(window.isKeyDown('1'))teapotRenderType=NORMALS;
+			if(window.isKeyDown('2'))teapotRenderType=UV;
 			
-			shader.bind();
-			shader.setRoutine(ShaderType.Fragment, type==NORMALS?"shadeNormals":"shadeUV");
-			shader.setMat4("proj", new Matrix4f().identity().perspective(Mathf.toRadians(80), 1, 0.01f, 100));
-			shader.setMat4("model", new Matrix4f().identity());
-			shader.setMat4("view", new Matrix4f().identity().lookAt(30*Mathf.cos(time),15,30*Mathf.sin(time),  0,0,0,  0,1,0));
-			tp.render();
-			shader.unbind();
+			modelShader.bind();
+			modelShader.setRoutine(ShaderType.Fragment, teapotRenderType==NORMALS?"shadeNormals":"shadeUV");
+			modelShader.setMat4("proj", proj);
+			modelShader.setMat4("model", new Matrix4f().identity().scale(scale));
+			modelShader.setMat4("view", new Matrix4f().identity().lookAt(30*Mathf.cos(time),15,30*Mathf.sin(time),  0,0,0,  0,1,0));
+			model.render();
+			modelShader.unbind();
+			
+			fbo.unbind();
+			
+
+			GLUtilities.clearScreen(1, 1, 1);
+			GLUtilities.enableDepth();
+			
+			fxShader.bind();
+			
+			colBuffer.bindToUnit(0);
+			fxShader.setTexture("tex", 0);
+			
+			fxShader.setFloat("texW", colBuffer.width);
+			fxShader.setFloat("texH", colBuffer.height);
+			
+			fxShader.setRoutine(ShaderType.Fragment, "sobelLuma");
+			
+			fxShader.setMat4("model", new Matrix4f().identity());
+			if(fxDisplayType==CUBE) {
+				fxShader.setMat4("proj", proj);
+				fxShader.setMat4("view", new Matrix4f().identity().lookAt(3*Mathf.cos(time),2,4*Mathf.sin(time),  0,0,0,  0,1,0));
+				cube.render();
+			}else if(fxDisplayType==PLANE) {
+				fxShader.setMat4("proj", new Matrix4f().identity());
+				fxShader.setMat4("view", new Matrix4f().identity());
+				plane.render();
+			}
+			
+			fxShader.unbind();
+			
 			
 			window.unbind();
 		}
 		
-		tp.delete();
+		fbo.delete();
+		
+		model.delete();
+		modelShader.delete();
+		
+		cube.delete();
+		
+		plane.delete();
+
+		fxShader.delete();
+		
+		window.delete();
 		
 		GLWindow.endGLFW();
 	}

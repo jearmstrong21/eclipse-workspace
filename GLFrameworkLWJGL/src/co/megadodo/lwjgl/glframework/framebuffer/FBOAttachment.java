@@ -61,5 +61,6 @@ public class FBOAttachment {
 	public static int ColorAttachment29=GL_COLOR_ATTACHMENT29;
 	public static int ColorAttachment30=GL_COLOR_ATTACHMENT30;
 	public static int ColorAttachment31=GL_COLOR_ATTACHMENT31;
+	public static int DepthAttachment=GL_DEPTH_ATTACHMENT;
 
 }

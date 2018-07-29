@@ -39,6 +39,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 public class Framebuffer implements GLResource {
 	
 	public int id;
+	public int depthRBO;
 	
 	public void gen() {
 		id=glGenFramebuffers();
@@ -46,6 +47,13 @@ public class Framebuffer implements GLResource {
 	
 	public boolean complete() {
 		return glCheckFramebufferStatus(GL_FRAMEBUFFER)==GL_FRAMEBUFFER_COMPLETE;
+	}
+	
+	public void createDepthRBO(int w,int h) {
+		depthRBO=glGenRenderbuffers();
+		glBindRenderbuffer(GL_RENDERBUFFER,depthRBO);
+		glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT,w,h);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_RENDERBUFFER,depthRBO);
 	}
 	
 	public void bind() {

@@ -55,6 +55,14 @@ public class GLUtilities {
 	public static void disableDepth() {
 		glDisable(GL_DEPTH_TEST);
 	}
+	
+	public static void enableProgramPointSize() {
+		glEnable(GL_PROGRAM_POINT_SIZE);
+	}
+	
+	public static void disableProgramPointSize() {
+		glDisable(GL_PROGRAM_POINT_SIZE);
+	}
 
 	public static void printGLInfo() {
 		String version = glGetString(GL_VERSION);

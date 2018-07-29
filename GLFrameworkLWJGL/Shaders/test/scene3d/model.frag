@@ -3,7 +3,7 @@
 in vec2 uv;
 in vec3 normal;
 
-out vec4 fragColor;
+layout (location=0) out vec4 fragColor;
 
 subroutine vec3 shadingRoutine();
 subroutine uniform shadingRoutine shadingType;

@@ -28,5 +28,6 @@ public class PolygonMode {
 	
 	public static int Fill=GL_FILL;
 	public static int Lines=GL_LINE;
+	public static int Points=GL_POINT;
 
 }
