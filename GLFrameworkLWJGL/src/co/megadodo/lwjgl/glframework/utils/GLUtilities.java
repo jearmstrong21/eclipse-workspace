@@ -64,6 +64,10 @@ public class GLUtilities {
 		glDisable(GL_PROGRAM_POINT_SIZE);
 	}
 
+	public static void setViewport(int x,int y,int w,int h) {
+		glViewport(x, y, w, h);
+	}
+	
 	public static void printGLInfo() {
 		String version = glGetString(GL_VERSION);
 		String vendor = glGetString(GL_VENDOR);

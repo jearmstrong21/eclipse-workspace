@@ -36,5 +36,6 @@ public class ShaderType {
 	
 	public static int Fragment=GL_FRAGMENT_SHADER;
 	public static int Vertex=GL_VERTEX_SHADER;
+	public static int Geometry=GL_GEOMETRY_SHADER;
 
 }

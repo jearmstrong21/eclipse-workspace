@@ -265,11 +265,14 @@ public class TestScene3D {
 		fxShader.attach("Shaders/test/scene3d/fx.vert", ShaderType.Vertex);
 		fxShader.link();
 		
+		int fboW=1000;
+		int fboH=1000;
+		
 		Framebuffer fbo=new Framebuffer();
 		fbo.gen();
 		fbo.bind();
-		fbo.createDepthRBO(window.getFBOWidth(), window.getFBOHeight());
-		Texture colBuffer=Texture.createEmptyTexture(window.getFBOWidth(), window.getFBOHeight());
+		fbo.createDepthRBO(fboW, fboH);
+		Texture colBuffer=Texture.createEmptyTexture(fboW, fboH);
 		fbo.attachTex(colBuffer, FBOAttachment.ColorAttachment0);
 		
 		if(!fbo.complete())System.exit(1);
@@ -290,11 +293,8 @@ public class TestScene3D {
 		int fxDisplayType=PLANE;
 		
 		GLUtilities.printGLInfo();
-		//TODO:  make kernels subroutines
-		//TODO:  print options to console after printGLInfo()\n\n
-		//TODO:  key to swap plane and cube
-		//TODO:  fix fbo depth, is rbo depth attachment needed?
-		//TODO:  swing ui for kernel selection / CUBE-PLANE selection / NORMALS - UV selection
+		
+		
 		
 		while(window.isOpen()) {
 			window.bind();
@@ -304,6 +304,7 @@ public class TestScene3D {
 			fbo.bind();
 			GLUtilities.clearScreen(0, 0, 0);
 			GLUtilities.enableDepth();
+			GLUtilities.setViewport(0, 0, fboW, fboH);
 			
 			float time=GLUtilities.getTime();
 			
@@ -323,14 +324,16 @@ public class TestScene3D {
 
 			GLUtilities.clearScreen(1, 1, 1);
 			GLUtilities.enableDepth();
+			GLUtilities.setViewport(0, 0, window.getFBOWidth(), window.getFBOHeight());
 			
 			fxShader.bind();
 			
 			colBuffer.bindToUnit(0);
 			fxShader.setTexture("tex", 0);
 			
-			fxShader.setFloat("texW", colBuffer.width);
-			fxShader.setFloat("texH", colBuffer.height);
+			float blur=1;// Higher values on vector (non-luma) kernels create a chromatic abberation-like effect.
+			fxShader.setFloat("texDX", blur/fboW);
+			fxShader.setFloat("texDY", blur/fboH);
 			
 			fxShader.setRoutine(ShaderType.Fragment, "sobelLuma");
 			
