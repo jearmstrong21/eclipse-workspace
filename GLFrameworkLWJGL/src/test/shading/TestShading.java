@@ -33,7 +33,8 @@ public class TestShading {
 		
 		GLUtilities.printGLInfo();
 		
-		Mesh mesh=ModelLoader.loadModel("Models/teapot.obj")[0];
+		float scale=30;
+		Mesh mesh=ModelLoader.loadModel("Models/ogre.obj")[0];
 		
 		VertexArray vao=new VertexArray();
 		vao.gen();
@@ -88,20 +89,29 @@ public class TestShading {
 			float eyeY=20;
 			float eyeZ=30;
 			
-			shader.setVec3("diffuseColor", 0.8f, 0, 0);
+			shader.setVec3("lights[0].diffuse", 0.8f, 0, 0);
 			float lightRot=time;
-			float teapotRot=0;
-			shader.setVec3("lightPos", 30*Mathf.cos(lightRot), 20, 30*Mathf.sin(lightRot));
+			float teapotRot=1;
+			shader.setVec3("lights[0].pos", 30*Mathf.cos(lightRot), 20, 30*Mathf.sin(lightRot));
 			
 			shader.setVec3("eyePos", eyeX, eyeY, eyeZ);
-			shader.setVec3("specularColor", 0, 1, 0);
+			shader.setVec3("lights[0].specular", 0, 1, 0);
+			shader.setFloat("lights[0].shininess", 10);
 			
-			shader.setVec3("ambientColor", 0, 0, 0.25f);
+			shader.setVec3("lights[0].ambient", 0, 0, 0.25f);
+			
+			shader.setInt("numLights", 2);
+			
+			shader.setVec3("lights[1].diffuse", 0,0.8f,0);
+			shader.setVec3("lights[1].pos", 30, 20, 30);
+			shader.setVec3("lights[1].specular", 0, 0, 1);
+			shader.setFloat("lights[1].shininess", 10);
+			shader.setVec3("lights[1].ambient", 0, 0, 0);
 
 			
 			Matrix4f proj=new Matrix4f().identity().perspective(Mathf.toRadians(80), 1, 0.01f, 100);
 			Matrix4f view=new Matrix4f().identity().lookAt(eyeX,eyeY,eyeZ,  0,0,0,  0,1,0);
-			Matrix4f model=new Matrix4f().identity().rotate(teapotRot, new Vector3f(0,1,0));
+			Matrix4f model=new Matrix4f().identity().rotate(teapotRot, new Vector3f(0,1,0)).scale(scale);
 			shader.setMat4("proj", proj);
 			shader.setMat4("view", view);
 			shader.setMat4("model", model);
