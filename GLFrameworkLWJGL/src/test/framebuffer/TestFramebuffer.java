@@ -2,12 +2,9 @@ package test.framebuffer;
 
 import java.util.ArrayList;
 
-import co.megadodo.lwjgl.glframework.Mathf;
 import co.megadodo.lwjgl.glframework.buffer.AttribType;
 import co.megadodo.lwjgl.glframework.buffer.BufferTarget;
 import co.megadodo.lwjgl.glframework.buffer.BufferUsage;
-import co.megadodo.lwjgl.glframework.buffer.PolygonMode;
-import co.megadodo.lwjgl.glframework.buffer.ProvokingVertex;
 import co.megadodo.lwjgl.glframework.buffer.VertexArray;
 import co.megadodo.lwjgl.glframework.buffer.VertexBuffer;
 import co.megadodo.lwjgl.glframework.framebuffer.FBOAttachment;
@@ -16,6 +13,7 @@ import co.megadodo.lwjgl.glframework.shader.ShaderProgram;
 import co.megadodo.lwjgl.glframework.shader.ShaderType;
 import co.megadodo.lwjgl.glframework.texture.Texture;
 import co.megadodo.lwjgl.glframework.utils.GLUtilities;
+import co.megadodo.lwjgl.glframework.utils.Mathf;
 import co.megadodo.lwjgl.glframework.utils.Utilities;
 import co.megadodo.lwjgl.glframework.window.GLWindow;
 
@@ -139,7 +137,7 @@ public class TestFramebuffer {
 
 			vao.bind();
 			ebo.bind();
-			ebo.render(ProvokingVertex.First, PolygonMode.Fill);
+			ebo.render();
 			ebo.unbind();
 			vao.unbind();
 
@@ -159,7 +157,7 @@ public class TestFramebuffer {
 			spQuad.setFloat("blurRad", (int)(window.getMouseX()/20.0f));
 			vaoQuad.bind();
 			eboQuad.bind();
-			eboQuad.render(ProvokingVertex.First, PolygonMode.Fill);
+			eboQuad.render();
 			eboQuad.unbind();
 			vaoQuad.unbind();
 			spQuad.unbind();

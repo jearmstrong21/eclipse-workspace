@@ -47,6 +47,14 @@ public class GLUtilities {
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	}
 	
+	public static void setPolygonMode(int mode) {
+		glPolygonMode(GL_FRONT_AND_BACK, mode);
+	}
+	
+	public static void setProvokingVertex(int mode) {
+		glProvokingVertex(mode);
+	}
+	
 	public static void enableDepth() {
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);

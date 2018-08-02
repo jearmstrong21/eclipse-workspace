@@ -89,13 +89,17 @@ public class Texture implements GLResource {
 	}
 	
 	public static Texture loadTexture(String filename) {
+		return loadTexture(filename, false);
+	}
+	
+	public static Texture loadTexture(String filename,boolean flip) {
 		ByteBuffer img;
 		int w,h;
 		try(MemoryStack stack=MemoryStack.stackPush()){
 			IntBuffer ibw=stack.mallocInt(1);
 			IntBuffer ibh=stack.mallocInt(1);
 			IntBuffer comp=stack.mallocInt(1);
-			stbi_set_flip_vertically_on_load(true);
+			stbi_set_flip_vertically_on_load(flip);
 			img=stbi_load(filename,ibw,ibh,comp,4);
 			if(img==null) {
 				throw new RuntimeException("Failed to load image "+filename);

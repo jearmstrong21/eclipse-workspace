@@ -1,4 +1,4 @@
-package co.megadodo.lwjgl.glframework.buffer;
+	package co.megadodo.lwjgl.glframework.buffer;
 import co.megadodo.lwjgl.glframework.*;
 
 import org.lwjgl.*;
@@ -41,9 +41,6 @@ public class VertexBuffer implements GLResource, GLRenderable {
 	public int target;
 	
 	public int usage;
-	
-	public int polyMode;
-	public int provokeMode;
 	
 	public void gen() {
 		id=glGenBuffers();
@@ -98,6 +95,10 @@ public class VertexBuffer implements GLResource, GLRenderable {
 		glBufferData(target,buf,usage);
 	}
 	
+	public void modifyData(float[]data,int start) {
+		glBufferSubData(target, start*AttribType.getBytes(AttribType.Float), data);
+	}
+	
 	public void addVertexAttrib(int attribNum, int size, int attribType, boolean normalized, int stride, int start) {
 
 		int bytes=AttribType.getBytes(attribType);
@@ -105,16 +106,16 @@ public class VertexBuffer implements GLResource, GLRenderable {
 		glVertexAttribPointer(attribNum, size, attribType, normalized, stride * bytes, start*bytes);
 	}
 	
-	public void render() {
-		render(provokeMode, polyMode);
+	public void allocateFloats(int numFloats) {
+		glBufferData(target, BufferUtils.createFloatBuffer(numFloats), usage);
 	}
 	
-	public void render(int provoke, int polygonMode) {
-		glPolygonMode(GL_FRONT_AND_BACK,polygonMode);
-		glProvokingVertex(provoke);
-		if(target==BufferTarget.ElementArray) {
-			glDrawElements(GL_TRIANGLES, num_data, data_type, 0);
-		}
+	public void allocateUnsignedInts(int num) {
+		glBufferData(target, BufferUtils.createIntBuffer(num), usage);
+	}
+	
+	public void render() {
+		glDrawElements(GL_TRIANGLES, num_data, data_type, 0);
 	}
 	
 	public void bind() {

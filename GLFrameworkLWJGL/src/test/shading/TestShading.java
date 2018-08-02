@@ -3,12 +3,9 @@ package test.shading;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import co.megadodo.lwjgl.glframework.Mathf;
 import co.megadodo.lwjgl.glframework.buffer.AttribType;
 import co.megadodo.lwjgl.glframework.buffer.BufferTarget;
 import co.megadodo.lwjgl.glframework.buffer.BufferUsage;
-import co.megadodo.lwjgl.glframework.buffer.PolygonMode;
-import co.megadodo.lwjgl.glframework.buffer.ProvokingVertex;
 import co.megadodo.lwjgl.glframework.buffer.VertexArray;
 import co.megadodo.lwjgl.glframework.buffer.VertexBuffer;
 import co.megadodo.lwjgl.glframework.model.Mesh;
@@ -16,6 +13,7 @@ import co.megadodo.lwjgl.glframework.model.ModelLoader;
 import co.megadodo.lwjgl.glframework.shader.ShaderProgram;
 import co.megadodo.lwjgl.glframework.shader.ShaderType;
 import co.megadodo.lwjgl.glframework.utils.GLUtilities;
+import co.megadodo.lwjgl.glframework.utils.Mathf;
 import co.megadodo.lwjgl.glframework.window.GLWindow;
 import co.megadodo.lwjgl.glframework.window.ProfileType;
 
@@ -33,7 +31,7 @@ public class TestShading {
 		
 		GLUtilities.printGLInfo();
 		
-		float scale=30;
+		float scale=15;
 		Mesh mesh=ModelLoader.loadModel("Models/ogre.obj")[0];
 		
 		VertexArray vao=new VertexArray();
@@ -91,12 +89,15 @@ public class TestShading {
 			
 			shader.setVec3("lights[0].diffuse", 0.8f, 0, 0);
 			float lightRot=time;
-			float teapotRot=1;
+			float teapotRot=0;
 			shader.setVec3("lights[0].pos", 30*Mathf.cos(lightRot), 20, 30*Mathf.sin(lightRot));
 			
 			shader.setVec3("eyePos", eyeX, eyeY, eyeZ);
 			shader.setVec3("lights[0].specular", 0, 1, 0);
 			shader.setFloat("lights[0].shininess", 10);
+			shader.setFloat("lights[0].Kd", 1);
+			shader.setFloat("lights[0].Ks", 1);
+			shader.setFloat("lights[0].Ka", 1);
 			
 			shader.setVec3("lights[0].ambient", 0, 0, 0.25f);
 			
@@ -107,6 +108,9 @@ public class TestShading {
 			shader.setVec3("lights[1].specular", 0, 0, 1);
 			shader.setFloat("lights[1].shininess", 10);
 			shader.setVec3("lights[1].ambient", 0, 0, 0);
+			shader.setFloat("lights[1].Kd", 1);
+			shader.setFloat("lights[1].Ks", 0);
+			shader.setFloat("lights[1].Ka", 1);
 
 			
 			Matrix4f proj=new Matrix4f().identity().perspective(Mathf.toRadians(80), 1, 0.01f, 100);
@@ -117,7 +121,7 @@ public class TestShading {
 			shader.setMat4("model", model);
 			vao.bind();
 			ebo.bind();
-			ebo.render(ProvokingVertex.First,PolygonMode.Fill);
+			ebo.render();
 			ebo.unbind();
 			vao.unbind();
 			shader.unbind();

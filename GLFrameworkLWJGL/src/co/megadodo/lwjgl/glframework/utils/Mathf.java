@@ -1,4 +1,4 @@
-package co.megadodo.lwjgl.glframework;
+package co.megadodo.lwjgl.glframework.utils;
 
 public class Mathf {
 	
@@ -8,12 +8,26 @@ public class Mathf {
 		return (float)Math.cos(f);
 	}
 	
+	public static float round(float f) {
+		return Math.round(f);
+	}
+	
 	public static float sin(float f) {
 		return (float)Math.sin(f);
 	}
 	
+	public static float fmod(float a,float b) {//a%b
+		while(a<-b)a+=b;
+		while(a>b)a-=b;
+		return a;
+	}
+	
 	public static float toRadians(float f) {
 		return (float)Math.toRadians(f);
+	}
+	
+	public static float random(float mi,float ma) {
+		return mi+(ma-mi)*(float)Math.random();
 	}
 	
 	public static float toDegrees(float f) {
@@ -26,6 +40,10 @@ public class Mathf {
 	
 	public static float lerp(float t,float a,float b) {
 		return a+t*(b-a);
+	}
+	
+	public static boolean isInRange(float t,float a,float b) {
+		return t==clamp(t,a,b);
 	}
 	
 	public static float clamp(float t,float a,float b) {

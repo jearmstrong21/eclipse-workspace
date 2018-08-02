@@ -83,7 +83,7 @@ public class TestTexture {
 			
 			vao.bind();
 			ebo.bind();
-			ebo.render(ProvokingVertex.Last,PolygonMode.Fill);
+			ebo.render();
 			ebo.unbind();
 			vao.unbind();
 			

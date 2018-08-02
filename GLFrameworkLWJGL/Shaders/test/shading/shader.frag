@@ -9,6 +9,7 @@ struct Light{
     vec3 specular;
     float shininess;
     vec3 ambient;
+    float Ka,Ks,Kd;
 };
 
 uniform Light lights[10];
@@ -29,13 +30,13 @@ void main(){
         vec3 r=normalize(-s+2.0*dot(s,n)*n);
         vec3 v=normalize(eyePos-(view*model*vec4(pos,1.0)).xyz);
         
-        vec3 lightDiffuse=lights[i].diffuse*dot(s,n);
+        vec3 lightDiffuse=lights[i].Kd*lights[i].diffuse*dot(s,n);
         
         float dotted=dot(r,v);
-        vec3 lightSpecular=lights[i].specular*pow(dotted,lights[i].shininess);
+        vec3 lightSpecular=lights[i].Ks*lights[i].specular*pow(dotted,lights[i].shininess);
         if(dotted<0.0)lightSpecular=vec3(0.0);
         
-        light+=lightDiffuse+lightSpecular+lights[i].ambient;
+        light+=lightDiffuse+lightSpecular+lights[i].Ka*lights[i].ambient;
     }
     
     fragColor=vec4(light,1.0);
