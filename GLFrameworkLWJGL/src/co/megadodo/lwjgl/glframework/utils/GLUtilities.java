@@ -5,6 +5,8 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import co.megadodo.lwjgl.glframework.window.GLWindow;
+
 import java.io.File;
 import java.nio.*;
 import java.util.Scanner;
@@ -62,6 +64,10 @@ public class GLUtilities {
 	
 	public static void disableDepth() {
 		glDisable(GL_DEPTH_TEST);
+	}
+	
+	public static void setDefaultViewport(GLWindow win) {
+		setViewport(0,0,win.getFBOWidth(),win.getFBOHeight());
 	}
 	
 	public static void enableProgramPointSize() {

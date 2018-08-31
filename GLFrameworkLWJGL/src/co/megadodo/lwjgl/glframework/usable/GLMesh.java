@@ -29,6 +29,10 @@ public class GLMesh {
 		ebo=null;
 	}
 	
+	public VertexBuffer getBuffer(int attrib) {
+		return buffers.get(attrib);
+	}
+	
 	public void addBuffer3f(int attrib,float[]data) {
 		addBuffer(attrib,data,3);
 	}
@@ -47,7 +51,7 @@ public class GLMesh {
 		vbo.bind();
 		vbo.setData(data);
 		vbo.addVertexAttrib(attrib, size, AttribType.Float, false, size, 0);
-		buffers.put(buffers.size(), vbo);
+		buffers.put(attrib, vbo);
 		vbo.unbind();
 		vao.unbind();
 	}
